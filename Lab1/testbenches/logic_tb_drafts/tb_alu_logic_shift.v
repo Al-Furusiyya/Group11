@@ -8,7 +8,7 @@ module tb_alu_logic_shift;
     wire [15:0] result;
     wire        flag_z;
 
-    // Instantiate Device Under Test (DUT)
+    // Instantiate the device under the test
     alu_logic_shift dut (
         .a(a),
         .b(b),
