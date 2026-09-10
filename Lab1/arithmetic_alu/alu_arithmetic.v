@@ -25,7 +25,7 @@ module alu_arithmetic (
     localparam OP_CMP  = 4'b0101; // CMP / CMPI (Signed compare)
 
 
-    always @(*) begin
+    always @(a, b, op, c_in) begin
         // Default assignments to prevent accidental latches
         sum_ext  = 17'b0;
         diff_ext = 17'b0;
