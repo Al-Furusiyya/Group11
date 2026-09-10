@@ -23,6 +23,7 @@ module alu_arithmetic (
     localparam OP_SUB  = 4'b0011; // SUB / SUBI
     localparam OP_SUBC = 4'b0100; // SUBC / SUBCI
     localparam OP_CMP  = 4'b0101; // CMP / CMPI (Signed compare)
+    localparam OP_CMPU  = 4'b0110; // CMP / CMPI (Unigned compare)
 
 
     always @(*) begin
@@ -67,7 +68,7 @@ module alu_arithmetic (
                 flag_f   = (a[15] != b[15]) && (result[15] != a[15]);
             end
 
-            OP_CMP: begin
+            OP_CMP, OP_CMPU: begin
                 diff_ext = {1'b0, a} - {1'b0, b};
                 // CMP does not write back to destination register
                 result   = 16'b0;
