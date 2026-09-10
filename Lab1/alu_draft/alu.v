@@ -176,6 +176,13 @@ module alu (
                 flag_write_en = 5'b00000;
             end
 
+            // ADDCU / ADDCUI 
+            5'd16: begin
+                arith_op      = 4'b0010; // same math as OP_ADDC, c_in still used
+                alu_out       = arith_result;
+                flag_write_en = 5'b00000; // diff from ADDC don't latch C/F
+            end
+
             default: begin
                 alu_out       = 16'h0000;
                 alu_flags     = 5'b00000;
