@@ -109,7 +109,7 @@ module alu (
 
             // CMPU / CMPUI (Unsigned Comparison)
             5'd7: begin
-                arith_op      = 4'b0110;
+                arith_op      = 4'b0101;     // Reuses the same op-code as CMP/CMPI, as op 0101 does the same process for both signed and unsigned.
                 alu_out       = 16'h0000;
                 alu_flags[2]  = arith_z;
                 alu_flags[1]  = arith_l;
