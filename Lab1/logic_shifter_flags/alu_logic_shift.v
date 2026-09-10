@@ -19,7 +19,7 @@ module alu_logic_shift (
 
     wire signed [4:0] shift_amt = b[4:0];
 
-    always @(*) begin
+    always @(a, b, op) begin
         case (op)
             OP_AND:  result = a & b;
             OP_OR:   result = a | b;
