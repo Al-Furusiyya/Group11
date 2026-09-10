@@ -39,7 +39,7 @@ module alu (
         .flag_z(logic_z)
     );
 
-    always @(*) begin
+    always @(alu_in_a, alu_in_b, alu_op, c_in) begin
         arith_op      = 4'b0000;
         logic_op      = 4'b0000;
         alu_out       = 16'h0000;
