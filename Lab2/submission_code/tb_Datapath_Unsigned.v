@@ -1,5 +1,4 @@
 `timescale 1ns / 1ps
-
 module tb_Datapath_Unsigned;
 
     reg clk;
@@ -67,8 +66,6 @@ module tb_Datapath_Unsigned;
         .stored_flags(stored_flags),
         .write_back_data(write_back_data)
     );
-
-    // 10 ns clock period
     always #5 clk = ~clk;
 
     initial begin
@@ -84,7 +81,6 @@ module tb_Datapath_Unsigned;
 
         write_enable = 1'b0;
         write_address = 4'd0;
-
         alu_op = ADD;
         use_immediate = 1'b0;
         immediate_value = 16'h0000;
@@ -97,14 +93,9 @@ module tb_Datapath_Unsigned;
 
         errors = 0;
 
-        // --------------------------------------------------
-        // TEST 1: Reset the datapath
-        // --------------------------------------------------
-
         #1;
         reset = 1'b1;
         #1;
-
         if ((read_data_a === 16'h0000) &&
             (read_data_b === 16'h0000) &&
             (stored_flags === 5'b00000)) begin
@@ -115,13 +106,8 @@ module tb_Datapath_Unsigned;
             $display("FAIL TEST 1: Datapath reset failed.");
             errors = errors + 1;
         end
-
         @(negedge clk);
         reset = 1'b0;
-
-        // --------------------------------------------------
-        // TEST 2: Load starting value 0 into R0
-        // --------------------------------------------------
 
         external_load = 1'b1;
         external_data = 16'd0;
@@ -130,11 +116,9 @@ module tb_Datapath_Unsigned;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd0;
         #1;
-
         if (read_data_a === 16'd0) begin
             $display("PASS TEST 2: R0 = 0.");
         end
@@ -143,11 +127,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 3: Load starting value 1 into R1
-        // --------------------------------------------------
-
         @(negedge clk);
 
         external_load = 1'b1;
@@ -161,7 +140,6 @@ module tb_Datapath_Unsigned;
         write_enable = 1'b0;
         read_address_a = 4'd1;
         #1;
-
         if (read_data_a === 16'd1) begin
             $display("PASS TEST 3: R1 = 1.");
         end
@@ -171,29 +149,17 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        // From this point forward, all data comes from
-        // ALU calculations instead of external loading.
         external_load = 1'b0;
         use_immediate = 1'b0;
         use_carry = 1'b0;
 
-        // Store C and F from each ADD operation.
-        // All Fibonacci values in this test should keep
-        // both C and F equal to zero.
         flag_write_enable = 5'b10010;
-
-        // --------------------------------------------------
-        // TEST 4: R2 = R0 + R1 = 1
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd0;
         read_address_b = 4'd1;
         write_address = 4'd2;
         write_enable = 1'b1;
         alu_op = ADD;
-
         @(posedge clk);
         #1;
 
@@ -209,10 +175,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 5: R3 = R1 + R2 = 2
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -237,10 +199,6 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 6: R4 = R2 + R3 = 3
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd2;
@@ -264,10 +222,6 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 7: R5 = R3 + R4 = 5
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd3;
@@ -290,11 +244,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 8: R6 = R4 + R5 = 8
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd4;
@@ -317,11 +266,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 9: R7 = R5 + R6 = 13
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd5;
@@ -344,11 +288,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 10: R8 = R6 + R7 = 21
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd6;
@@ -371,11 +310,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 11: R9 = R7 + R8 = 34
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd7;
@@ -399,10 +333,6 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 12: R10 = R8 + R9 = 55
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd8;
@@ -425,18 +355,11 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 13: R11 = R9 + R10 = 89
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd9;
         read_address_b = 4'd10;
         write_address = 4'd11;
         write_enable = 1'b1;
-
         @(posedge clk);
         #1;
 
@@ -453,12 +376,7 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 14: R12 = R10 + R11 = 144
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd10;
         read_address_b = 4'd11;
         write_address = 4'd12;
@@ -466,11 +384,9 @@ module tb_Datapath_Unsigned;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd12;
         #1;
-
         if (read_data_a === 16'd144) begin
             $display("PASS TEST 14: R12 = 144.");
         end
@@ -480,24 +396,16 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 15: R13 = R11 + R12 = 233
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd11;
         read_address_b = 4'd12;
         write_address = 4'd13;
         write_enable = 1'b1;
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd13;
         #1;
-
         if (read_data_a === 16'd233) begin
             $display("PASS TEST 15: R13 = 233.");
         end
@@ -506,11 +414,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 16: R14 = R12 + R13 = 377
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd12;
@@ -533,13 +436,7 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 17: R15 = R13 + R14 = 610
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd13;
         read_address_b = 4'd14;
         write_address = 4'd15;
@@ -547,7 +444,6 @@ module tb_Datapath_Unsigned;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         flag_write_enable = 5'b00000;
 
@@ -562,15 +458,9 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 18: Simultaneously read final two values
-        // --------------------------------------------------
-
         read_address_a = 4'd14;
         read_address_b = 4'd15;
         #1;
-
         if ((read_data_a === 16'd377) &&
             (read_data_b === 16'd610)) begin
 
@@ -581,11 +471,6 @@ module tb_Datapath_Unsigned;
                      read_data_a, read_data_b);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 19: Verify no carry or overflow occurred
-        // --------------------------------------------------
-
         if (stored_flags === 5'b00000) begin
             $display("PASS TEST 19: No carry or overflow occurred.");
         end
@@ -594,20 +479,11 @@ module tb_Datapath_Unsigned;
                      stored_flags);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // Final result
-        // --------------------------------------------------
-
-        $display("--------------------------------------------------");
-
         if (errors == 0)
             $display("SUCCESS: UNSIGNED FIBONACCI TEST PASSED.");
         else
             $display("FAIL: %0d UNSIGNED TEST(S) FAILED.", errors);
 
         $finish;
-
     end
-
 endmodule
