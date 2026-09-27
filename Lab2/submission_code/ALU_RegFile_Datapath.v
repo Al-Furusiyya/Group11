@@ -37,50 +37,47 @@ module ALU_RegFile_Datapath (
     wire alu_carryin;
 
  
-    assign selected_rhs =
-        use_immediate ? immediate_value : read_data_b;
+    assign selected_rhs=use_immediate ?immediate_value : read_data_b;
 
-    assign alu_carryin =
-        use_carry ? stored_flags[4] : 1'b0;
+    assign alu_carryin =use_carry ?stored_flags[4] : 1'b0;
 
     
-    assign write_back_data =
-        external_load ? external_data : alu_result;
+    assign write_back_data =external_load ? external_data : alu_result;
 
-    RegisterFile register_file (
-        .clk(clk),
-        .reset(reset),
+    RegisterFile register_file(
+.clk(clk),
+ .reset(reset),
 
-        .read_enable_a(read_enable_a),
-        .read_address_a(read_address_a),
-        .read_data_a(read_data_a),
+.read_enable_a(read_enable_a),
+ .read_address_a(read_address_a),
+ .read_data_a(read_data_a),
 
-        .read_enable_b(read_enable_b),
-        .read_address_b(read_address_b),
-        .read_data_b(read_data_b),
+ .read_enable_b(read_enable_b),
+ .read_address_b(read_address_b),
+ .read_data_b(read_data_b),
 
-        .write_enable(write_enable),
-        .write_address(write_address),
-        .write_data(write_back_data)
+ .write_enable(write_enable),
+.write_address(write_address),
+.write_data(write_back_data)
     );
 
     ALU #(
-        .WIDTH(16)
+.WIDTH(16)
     ) alu_unit (
-        .alu_op(alu_op),
-        .lhs(read_data_a),
-        .rhs(selected_rhs),
-        .carryin(alu_carryin),
-        .result(alu_result),
-        .flags(alu_flags)
-    );
+.alu_op(alu_op),
+ .lhs(read_data_a),
+.rhs(selected_rhs),
+ .carryin(alu_carryin),
+.result(alu_result),
+.flags(alu_flags)
+);
 
-    FlagRegister flag_register (
-        .clk(clk),
-        .reset(reset),
-        .new_flags(alu_flags),
-        .flag_write_enable(flag_write_enable),
-        .stored_flags(stored_flags)
-    );
+FlagRegister flag_register (
+  .clk(clk),
+  .reset(reset),
+ .new_flags(alu_flags),
+  .flag_write_enable(flag_write_enable),
+  .stored_flags(stored_flags)
+ );
 
 endmodule
