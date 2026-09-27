@@ -2,38 +2,30 @@
 
 module tb_ALU_RegFile_Datapath;
 
-    // Clock and reset
     reg clk;
     reg reset;
 
-    // Register File read port A
     reg read_enable_a;
     reg [3:0] read_address_a;
     wire [15:0] read_data_a;
 
-    // Register File read port B
     reg read_enable_b;
     reg [3:0] read_address_b;
     wire [15:0] read_data_b;
 
-    // Register File write port
     reg write_enable;
     reg [3:0] write_address;
 
-    // ALU controls
     reg [3:0] alu_op;
     reg use_immediate;
     reg [15:0] immediate_value;
     reg use_carry;
 
-    // External loading controls
     reg external_load;
     reg [15:0] external_data;
 
-    // Flag Register control
     reg [4:0] flag_write_enable;
 
-    // Datapath outputs
     wire [15:0] selected_rhs;
     wire [15:0] alu_result;
     wire [4:0] alu_flags;
@@ -42,13 +34,11 @@ module tb_ALU_RegFile_Datapath;
 
     integer errors;
 
-    // ALU operation codes
     localparam [3:0] ADD  = 4'h2;
     localparam [3:0] CMP  = 4'hD;
     localparam [3:0] CMPU = 4'hE;
     localparam [3:0] NOP  = 4'hF;
 
-    // Instantiate the complete datapath.
     ALU_RegFile_Datapath dut (
         .clk(clk),
         .reset(reset),
@@ -81,12 +71,10 @@ module tb_ALU_RegFile_Datapath;
         .write_back_data(write_back_data)
     );
 
-    // Generate a 10 ns clock.
     always #5 clk = ~clk;
 
     initial begin
 
-        // Initial values
         clk = 1'b0;
         reset = 1'b0;
 
@@ -111,9 +99,6 @@ module tb_ALU_RegFile_Datapath;
 
         errors = 0;
 
-        // --------------------------------------------------
-        // TEST 1: Reset the complete datapath
-        // --------------------------------------------------
 
         #1;
         reset = 1'b1;
@@ -130,13 +115,9 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // Release reset before loading data.
         @(negedge clk);
         reset = 1'b0;
 
-        // --------------------------------------------------
-        // TEST 2: Load decimal 5 into R1
-        // --------------------------------------------------
 
         external_load = 1'b1;
         external_data = 16'h0005;
@@ -158,10 +139,6 @@ module tb_ALU_RegFile_Datapath;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 3: Load decimal 3 into R2
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -188,11 +165,6 @@ module tb_ALU_RegFile_Datapath;
                      read_data_a, read_data_b);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 4: R3 = R1 + R2
-        // Expected result: 5 + 3 = 8
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -239,11 +211,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 5: R4 = R3 + immediate value 2
-        // Expected result: 8 + 2 = 10 = 000A
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd3;
@@ -288,9 +255,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 6: Load FFFF into R5
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -315,10 +279,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 7: Load 0001 into R6
-        // --------------------------------------------------
-
         @(negedge clk);
 
         external_load = 1'b1;
@@ -341,14 +301,6 @@ module tb_ALU_RegFile_Datapath;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 8: R7 = FFFF + 0001
-        //
-        // Expected result: 0000
-        // Expected carry flag: 1
-        // Store only the C flag.
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -397,13 +349,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 9: Use the stored carry flag
-        //
-        // R8 = R1 + R2 + stored carry
-        // R8 = 5 + 3 + 1 = 9
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd1;
@@ -446,14 +391,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 10: Signed comparison
-        //
-        // R5 = FFFF, which is -1 signed
-        // R6 = 0001, which is +1 signed
-        // Therefore R5 < R6 and N should be 1.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd5;
@@ -465,7 +402,6 @@ module tb_ALU_RegFile_Datapath;
 
         write_enable = 1'b0;
 
-        // Store only N and Z.
         flag_write_enable = 5'b00101;
 
         #1;
@@ -493,14 +429,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 11: Unsigned comparison
-        //
-        // R1 = 5
-        // R4 = 10
-        // Therefore R1 < R4 and L should be 1.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd1;
@@ -509,7 +437,6 @@ module tb_ALU_RegFile_Datapath;
         alu_op = CMPU;
         write_enable = 1'b0;
 
-        // Store only L and Z.
         flag_write_enable = 5'b01001;
 
         #1;
@@ -537,13 +464,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 12: write_enable must prevent a write
-        //
-        // Attempt to overwrite R1 with DEAD while disabled.
-        // R1 must remain 0005.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         external_load = 1'b1;
@@ -566,10 +486,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 13: Disabled read ports must output zero
-        // --------------------------------------------------
-
         read_enable_a = 1'b0;
         read_enable_b = 1'b0;
         use_immediate = 1'b0;
@@ -586,10 +502,6 @@ module tb_ALU_RegFile_Datapath;
                      read_data_a, read_data_b, selected_rhs);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 14: NOP must produce zero result and flags
-        // --------------------------------------------------
 
         read_enable_a = 1'b1;
         read_enable_b = 1'b1;
@@ -611,10 +523,6 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 15: Final asynchronous reset
-        // --------------------------------------------------
-
         read_address_a = 4'd1;
         read_address_b = 4'd8;
 
@@ -634,11 +542,8 @@ module tb_ALU_RegFile_Datapath;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // Final result
-        // --------------------------------------------------
 
-        $display("--------------------------------------------------");
+        $display("--");
 
         if (errors == 0)
             $display("SUCCESS: ALL DATAPATH TESTS PASSED.");
