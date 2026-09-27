@@ -71,7 +71,6 @@ module tb_Datapath_Signed;
         .write_back_data(write_back_data)
     );
 
-    // 10 ns clock period
     always #5 clk = ~clk;
 
     initial begin
@@ -99,11 +98,6 @@ module tb_Datapath_Signed;
         flag_write_enable = 5'b00000;
 
         errors = 0;
-
-        // --------------------------------------------------
-        // TEST 1: Reset
-        // --------------------------------------------------
-
         #1;
         reset = 1'b1;
         #1;
@@ -118,28 +112,17 @@ module tb_Datapath_Signed;
             $display("FAIL TEST 1: Datapath reset failed.");
             errors = errors + 1;
         end
-
         @(negedge clk);
         reset = 1'b0;
-
-        // --------------------------------------------------
-        // TEST 2: Load -5 into R1
-        //
-        // -5 in 16-bit two's complement is FFFB.
-        // --------------------------------------------------
-
         external_load = 1'b1;
         external_data = 16'hFFFB;
         write_enable = 1'b1;
         write_address = 4'd1;
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd1;
         #1;
-
         if (read_data_a === 16'hFFFB) begin
             $display("PASS TEST 2: R1 contains -5 (FFFB).");
         end
@@ -148,11 +131,7 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 3: Load +3 into R2
-        // --------------------------------------------------
-
+    
         @(negedge clk);
 
         external_load = 1'b1;
@@ -162,7 +141,6 @@ module tb_Datapath_Signed;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd2;
         #1;
@@ -175,12 +153,6 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 4: R3 = R1 + R2
-        //
-        // -5 + 3 = -2 = FFFE
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -195,7 +167,6 @@ module tb_Datapath_Signed;
         write_enable = 1'b1;
         write_address = 4'd3;
 
-        // Store C and F.
         flag_write_enable = 5'b10010;
 
         #1;
@@ -213,12 +184,10 @@ module tb_Datapath_Signed;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         flag_write_enable = 5'b00000;
         read_address_a = 4'd3;
         #1;
-
         if (read_data_a === 16'hFFFE) begin
             $display("PASS TEST 4B: R3 contains -2 (FFFE).");
         end
@@ -227,26 +196,15 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 5: R4 = R2 - R1
-        //
-        // 3 - (-5) = 8
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd2;
         read_address_b = 4'd1;
-
         alu_op = SUB;
         use_carry = 1'b0;
-
         write_enable = 1'b1;
         write_address = 4'd4;
 
         flag_write_enable = 5'b11111;
-
         #1;
 
         if ((alu_result === 16'h0008) &&
@@ -277,12 +235,6 @@ module tb_Datapath_Signed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 6: R5 = R1 - R2
-        //
-        // -5 - 3 = -8 = FFF8
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd1;
@@ -293,9 +245,7 @@ module tb_Datapath_Signed;
         write_address = 4'd5;
 
         flag_write_enable = 5'b11111;
-
         #1;
-
         if ((alu_result === 16'hFFF8) &&
             (alu_flags === 5'b00100)) begin
 
@@ -306,15 +256,12 @@ module tb_Datapath_Signed;
                      alu_result, alu_flags);
             errors = errors + 1;
         end
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         flag_write_enable = 5'b00000;
         read_address_a = 4'd5;
         #1;
-
         if (read_data_a === 16'hFFF8) begin
             $display("PASS TEST 6B: R5 contains -8 (FFF8).");
         end
@@ -324,12 +271,6 @@ module tb_Datapath_Signed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 7: Signed comparison of -5 and +3
-        //
-        // -5 < +3, so N must equal 1.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd1;
@@ -337,8 +278,7 @@ module tb_Datapath_Signed;
 
         alu_op = CMP;
         write_enable = 1'b0;
-
-        // Store N and Z.
+        
         flag_write_enable = 5'b00101;
 
         #1;
@@ -364,24 +304,14 @@ module tb_Datapath_Signed;
             $display("FAIL TEST 7B: Expected 00100, got %b.",
                      stored_flags);
             errors = errors + 1;
-        end
-
-        // --------------------------------------------------
-        // TEST 8: Compare R3 with itself
-        //
-        // -2 == -2, so Z must equal 1 and N must equal 0.
-        // --------------------------------------------------
+        end     
 
         @(negedge clk);
-
         read_address_a = 4'd3;
         read_address_b = 4'd3;
-
         alu_op = CMP;
         flag_write_enable = 5'b00101;
-
         #1;
-
         if (alu_flags === 5'b00001) begin
             $display("PASS TEST 8A: Equal comparison set Z.");
         end
@@ -390,7 +320,6 @@ module tb_Datapath_Signed;
                      alu_flags);
             errors = errors + 1;
         end
-
         @(posedge clk);
         #1;
 
@@ -404,21 +333,14 @@ module tb_Datapath_Signed;
                      stored_flags);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 9: Load maximum positive number into R6
-        // --------------------------------------------------
-
         @(negedge clk);
 
         external_load = 1'b1;
         external_data = 16'h7FFF;
         write_enable = 1'b1;
         write_address = 4'd6;
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd6;
         #1;
@@ -431,25 +353,16 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 10: Load 1 into R7
-        // --------------------------------------------------
-
         @(negedge clk);
-
         external_load = 1'b1;
         external_data = 16'h0001;
         write_enable = 1'b1;
         write_address = 4'd7;
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd7;
         #1;
-
         if (read_data_a === 16'h0001) begin
             $display("PASS TEST 10: R7 contains 0001.");
         end
@@ -458,20 +371,13 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 11: Signed positive overflow
-        //
-        // R8 = 7FFF + 0001 = 8000
-        // F must equal 1.
-        // --------------------------------------------------
+    
 
         @(negedge clk);
 
         external_load = 1'b0;
         read_address_a = 4'd6;
         read_address_b = 4'd7;
-
         alu_op = ADD;
         use_immediate = 1'b0;
         use_carry = 1'b0;
@@ -479,11 +385,9 @@ module tb_Datapath_Signed;
         write_enable = 1'b1;
         write_address = 4'd8;
 
-        // Store C and F.
         flag_write_enable = 5'b10010;
 
         #1;
-
         if ((alu_result === 16'h8000) &&
             (alu_flags === 5'b00010)) begin
 
@@ -494,7 +398,6 @@ module tb_Datapath_Signed;
                      alu_result, alu_flags);
             errors = errors + 1;
         end
-
         @(posedge clk);
         #1;
 
@@ -502,7 +405,6 @@ module tb_Datapath_Signed;
         flag_write_enable = 5'b00000;
         read_address_a = 4'd8;
         #1;
-
         if ((read_data_a === 16'h8000) &&
             (stored_flags === 5'b00011)) begin
 
@@ -513,11 +415,6 @@ module tb_Datapath_Signed;
                      read_data_a, stored_flags);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 12: Load most-negative number into R9
-        // --------------------------------------------------
-
         @(negedge clk);
 
         external_load = 1'b1;
@@ -527,7 +424,6 @@ module tb_Datapath_Signed;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd9;
         #1;
@@ -541,24 +437,17 @@ module tb_Datapath_Signed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 13: Load 1 into R10
-        // --------------------------------------------------
-
         @(negedge clk);
 
         external_load = 1'b1;
         external_data = 16'h0001;
         write_enable = 1'b1;
         write_address = 4'd10;
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd10;
         #1;
-
         if (read_data_a === 16'h0001) begin
             $display("PASS TEST 13: R10 contains 0001.");
         end
@@ -567,30 +456,16 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 14: Signed negative overflow
-        //
-        // R11 = 8000 - 0001 = 7FFF
-        // This operation must set F.
-        // --------------------------------------------------
-
         @(negedge clk);
-
         external_load = 1'b0;
         read_address_a = 4'd9;
         read_address_b = 4'd10;
-
         alu_op = SUB;
         use_carry = 1'b0;
-
         write_enable = 1'b1;
         write_address = 4'd11;
-
         flag_write_enable = 5'b11111;
-
         #1;
-
         if ((alu_result === 16'h7FFF) &&
             (alu_flags === 5'b00110)) begin
 
@@ -601,15 +476,12 @@ module tb_Datapath_Signed;
                      alu_result, alu_flags);
             errors = errors + 1;
         end
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         flag_write_enable = 5'b00000;
         read_address_a = 4'd11;
         #1;
-
         if ((read_data_a === 16'h7FFF) &&
             (stored_flags === 5'b00110)) begin
 
@@ -620,17 +492,7 @@ module tb_Datapath_Signed;
                      read_data_a, stored_flags);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 15: Immediate signed addition
-        //
-        // R12 = R5 + 10
-        // R5 contains -8.
-        // -8 + 10 = 2.
-        // --------------------------------------------------
-
         @(negedge clk);
-
         read_address_a = 4'd5;
         read_address_b = 4'd0;
 
@@ -638,15 +500,11 @@ module tb_Datapath_Signed;
         use_immediate = 1'b1;
         immediate_value = 16'h000A;
         use_carry = 1'b0;
-
         external_load = 1'b0;
         write_enable = 1'b1;
         write_address = 4'd12;
-
         flag_write_enable = 5'b10010;
-
         #1;
-
         if ((selected_rhs === 16'h000A) &&
             (alu_result === 16'h0002) &&
             (alu_flags === 5'b10000)) begin
@@ -658,16 +516,13 @@ module tb_Datapath_Signed;
                      selected_rhs, alu_result, alu_flags);
             errors = errors + 1;
         end
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         flag_write_enable = 5'b00000;
         use_immediate = 1'b0;
         read_address_a = 4'd12;
         #1;
-
         if (read_data_a === 16'h0002) begin
             $display("PASS TEST 15B: R12 contains 0002.");
         end
@@ -676,35 +531,19 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 16: Arithmetic right shift
-        //
-        // Shift R5, which contains -8, right by 2.
-        // A negative shift amount means shift right.
-        //
-        // FFFE represents -2 as the shift amount.
-        // FFF8 shifted right by 2 produces FFFE.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd5;
         read_address_b = 4'd0;
-
         alu_op = ASH;
         use_immediate = 1'b1;
         immediate_value = 16'hFFFE;
         use_carry = 1'b0;
-
         external_load = 1'b0;
         write_enable = 1'b1;
         write_address = 4'd13;
-
         flag_write_enable = 5'b00000;
-
         #1;
-
         if (alu_result === 16'hFFFE) begin
             $display("PASS TEST 16A: Arithmetic shift produced -2.");
         end
@@ -713,15 +552,12 @@ module tb_Datapath_Signed;
                      alu_result);
             errors = errors + 1;
         end
-
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         use_immediate = 1'b0;
         read_address_a = 4'd13;
         #1;
-
         if (read_data_a === 16'hFFFE) begin
             $display("PASS TEST 16B: R13 contains -2 (FFFE).");
         end
@@ -730,15 +566,9 @@ module tb_Datapath_Signed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 17: Final simultaneous signed-value read
-        // --------------------------------------------------
-
         read_address_a = 4'd5;
         read_address_b = 4'd13;
         #1;
-
         if ((read_data_a === 16'hFFF8) &&
             (read_data_b === 16'hFFFE)) begin
 
@@ -749,12 +579,7 @@ module tb_Datapath_Signed;
                      read_data_a, read_data_b);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // Final result
-        // --------------------------------------------------
-
-        $display("--------------------------------------------------");
+        $display("--");
 
         if (errors == 0)
             $display("SUCCESS: ALL SIGNED DATAPATH TESTS PASSED.");
@@ -762,7 +587,5 @@ module tb_Datapath_Signed;
             $display("FAIL: %0d SIGNED TEST(S) FAILED.", errors);
 
         $finish;
-
     end
-
 endmodule
