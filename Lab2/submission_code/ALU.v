@@ -15,13 +15,13 @@
 module ALU #(
     parameter WIDTH = 16
 )(
-    input  wire [3:0]       alu_op,
+    input  wire [3:0] alu_op,
     input  wire [WIDTH-1:0] lhs,
     input  wire [WIDTH-1:0] rhs,
-    input  wire             carryin,
+    input  wire  carryin,
 
     output reg  [WIDTH-1:0] result,
-    output reg  [4:0]       flags
+    output reg  [4:0] flags
 );
 
     localparam [3:0] ZEXT= 4'h0;
