@@ -1,45 +1,22 @@
 `timescale 1ns / 1ps
-
-/*
- * Simple self-checking testbench for RegisterFile.v
- *
- * This testbench checks:
- *     1. Disabled read ports
- *     2. Reset
- *     3. Writing R1
- *     4. Simultaneous reads from R1 and R2
- *     5. Reading one register through both ports
- *     6. Write-enable protection
- *     7. Writing R15
- *     8. Disabling both read ports
- *     9. Overwriting a register
- *    10. Resetting previously written registers
- */
 module tb_RegisterFile;
 
-    // Clock and reset
     reg clk;
     reg reset;
 
-    // Read port A
     reg         read_enable_a;
     reg  [3:0]  read_address_a;
     wire [15:0] read_data_a;
-
-    // Read port B
     reg         read_enable_b;
     reg  [3:0]  read_address_b;
     wire [15:0] read_data_b;
 
-    // Write port
     reg         write_enable;
     reg  [3:0]  write_address;
     reg  [15:0] write_data;
 
-    // Count any failed tests
     integer errors;
 
-    // Instantiate the register file
     RegisterFile dut (
         .clk(clk),
         .reset(reset),
@@ -57,12 +34,10 @@ module tb_RegisterFile;
         .write_data(write_data)
     );
 
-    // Generate a clock with a 10 ns period
     always #5 clk = ~clk;
 
     initial begin
 
-        // Initialize every testbench input
         clk = 1'b0;
         reset = 1'b1;
 
@@ -77,11 +52,6 @@ module tb_RegisterFile;
         write_data = 16'h0000;
 
         errors = 0;
-
-        /*
-         * TEST 1
-         * Disabled read ports must output zero.
-         */
         #2;
 
         if ((read_data_a !== 16'h0000) ||
@@ -98,11 +68,6 @@ module tb_RegisterFile;
                 "PASS TEST 1: Disabled read ports output zero."
             );
         end
-
-        /*
-         * TEST 2
-         * Reset should clear R0 and R15.
-         */
         read_enable_a = 1'b1;
         read_address_a = 4'd0;
 
@@ -126,13 +91,8 @@ module tb_RegisterFile;
             );
         end
 
-        // Release reset
         reset = 1'b0;
-
-        /*
-         * TEST 3
-         * Write 1234 into R1 and read it through port A.
-         */
+ 
         write_enable = 1'b1;
         write_address = 4'd1;
         write_data = 16'h1234;
@@ -162,10 +122,6 @@ module tb_RegisterFile;
             );
         end
 
-        /*
-         * Write ABCD into R2.
-         * This value is used in TEST 4 and TEST 5.
-         */
         write_enable = 1'b1;
         write_address = 4'd2;
         write_data = 16'hABCD;
@@ -174,13 +130,7 @@ module tb_RegisterFile;
         #1;
 
         write_enable = 1'b0;
-
-        /*
-         * TEST 4
-         * Read R1 through port A and R2 through port B
-         * at the same time.
-         */
-        read_enable_a = 1'b1;
+        read_enable_a =1'b1;
         read_address_a = 4'd1;
 
         read_enable_b = 1'b1;
@@ -205,10 +155,6 @@ module tb_RegisterFile;
             );
         end
 
-        /*
-         * TEST 5
-         * Read R2 through both ports.
-         */
         read_address_a = 4'd2;
         read_address_b = 4'd2;
 
@@ -229,20 +175,13 @@ module tb_RegisterFile;
             );
         end
 
-        /*
-         * TEST 6
-         * Try to overwrite R1 while write_enable is zero.
-         * R1 must remain 1234.
-         */
         write_enable = 1'b0;
         write_address = 4'd1;
         write_data = 16'hFFFF;
-
         @(posedge clk);
         #1;
 
         read_address_a = 4'd1;
-
         #1;
 
         if (read_data_a !== 16'h1234) begin
@@ -258,24 +197,15 @@ module tb_RegisterFile;
                 "PASS TEST 6: write_enable prevented the write."
             );
         end
-
-        /*
-         * TEST 7
-         * Write 8000 into the highest register, R15.
-         */
         write_enable = 1'b1;
         write_address = 4'd15;
         write_data = 16'h8000;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
-
         read_address_b = 4'd15;
-
         #1;
-
         if (read_data_b !== 16'h8000) begin
 
             $display(
@@ -290,11 +220,6 @@ module tb_RegisterFile;
                 "PASS TEST 7: R15 stored 8000."
             );
         end
-
-        /*
-         * TEST 8
-         * Disable both read ports.
-         */
         read_enable_a = 1'b0;
         read_enable_b = 1'b0;
 
@@ -315,10 +240,6 @@ module tb_RegisterFile;
             );
         end
 
-        /*
-         * TEST 9
-         * Overwrite R2 with 0001.
-         */
         write_enable = 1'b1;
         write_address = 4'd2;
         write_data = 16'h0001;
@@ -347,12 +268,6 @@ module tb_RegisterFile;
                 "PASS TEST 9: R2 was overwritten with 0001."
             );
         end
-
-        /*
-         * TEST 10
-         * Activate reset again.
-         * R1, R2, and R15 should all become zero.
-         */
         reset = 1'b1;
 
         #1;
@@ -362,9 +277,7 @@ module tb_RegisterFile;
 
         read_address_a = 4'd1;
         read_address_b = 4'd2;
-
         #1;
-
         if ((read_data_a !== 16'h0000) ||
             (read_data_b !== 16'h0000)) begin
 
@@ -379,11 +292,8 @@ module tb_RegisterFile;
                 "PASS TEST 10A: Reset cleared R1 and R2."
             );
         end
-
         read_address_a = 4'd15;
-
         #1;
-
         if (read_data_a !== 16'h0000) begin
 
             $display(
@@ -399,14 +309,9 @@ module tb_RegisterFile;
         end
 
         reset = 1'b0;
-
-        /*
-         * Print the final testbench result.
-         */
         $display(
-            "--------------------------------------------------"
+            "---"
         );
-
         if (errors == 0) begin
             $display(
                 "SUCCESS: ALL REGISTER FILE TESTS PASSED."
@@ -418,9 +323,6 @@ module tb_RegisterFile;
                 errors
             );
         end
-
         $finish;
-
     end
-
 endmodule
