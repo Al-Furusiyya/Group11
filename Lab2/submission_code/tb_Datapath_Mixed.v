@@ -79,7 +79,6 @@ module tb_Datapath_Mixed;
         .write_back_data(write_back_data)
     );
 
-    // 10 ns clock period
     always #5 clk = ~clk;
 
     initial begin
@@ -108,10 +107,6 @@ module tb_Datapath_Mixed;
 
         errors = 0;
 
-        // --------------------------------------------------
-        // TEST 1: Reset
-        // --------------------------------------------------
-
         #1;
         reset = 1'b1;
         #1;
@@ -129,10 +124,6 @@ module tb_Datapath_Mixed;
 
         @(negedge clk);
         reset = 1'b0;
-
-        // --------------------------------------------------
-        // TEST 2: Load F0F0 into R1
-        // --------------------------------------------------
 
         external_load = 1'b1;
         external_data = 16'hF0F0;
@@ -155,9 +146,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 3: Load 0FF0 into R2
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -182,16 +170,9 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // All following register writes use the ALU result.
         external_load = 1'b0;
         use_carry = 1'b0;
         flag_write_enable = 5'b00000;
-
-        // --------------------------------------------------
-        // TEST 4: R3 = R1 AND R2
-        //
-        // F0F0 AND 0FF0 = 00F0
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -231,12 +212,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 5: R4 = R1 OR R2
-        //
-        // F0F0 OR 0FF0 = FFF0
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd1;
@@ -272,12 +247,6 @@ module tb_Datapath_Mixed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 6: R5 = R1 XOR R2
-        //
-        // F0F0 XOR 0FF0 = FF00
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -315,12 +284,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 7: R6 = NOT R2
-        //
-        // NOT 0FF0 = F00F
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd2;
@@ -356,12 +319,6 @@ module tb_Datapath_Mixed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 8: R7 = PASS R5
-        //
-        // PASS returns the right-side operand.
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -400,12 +357,6 @@ module tb_Datapath_Mixed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 9: R8 = R3 multiplied by immediate 4
-        //
-        // 00F0 multiplied by 4 = 03C0
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -449,12 +400,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 10: R9 = R8 logically shifted left by 1
-        //
-        // 03C0 << 1 = 0780
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd8;
@@ -494,13 +439,6 @@ module tb_Datapath_Mixed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 11: R10 = R9 logically shifted right by 2
-        //
-        // Negative shift amount FFFE represents -2.
-        // 0780 >> 2 = 01E0
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -542,12 +480,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 12: Zero extend 80 into R11
-        //
-        // Zero extension produces 0080.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd0;
@@ -588,12 +520,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 13: Sign extend 80 into R12
-        //
-        // Sign extension produces FF80.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         alu_op = SEXT;
@@ -630,12 +556,6 @@ module tb_Datapath_Mixed;
                      read_data_a);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 14: Load upper immediate AB into R13
-        //
-        // LUI produces AB00.
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -674,14 +594,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 15: Unsigned comparison
-        //
-        // R11 = 0080
-        // R13 = AB00
-        // Unsigned 0080 < AB00, so L must equal 1.
-        // --------------------------------------------------
-
         @(negedge clk);
 
         read_address_a = 4'd11;
@@ -691,7 +603,6 @@ module tb_Datapath_Mixed;
         use_immediate = 1'b0;
         write_enable = 1'b0;
 
-        // Store L and Z.
         flag_write_enable = 5'b01001;
 
         #1;
@@ -718,12 +629,6 @@ module tb_Datapath_Mixed;
                      stored_flags);
             errors = errors + 1;
         end
-
-        // --------------------------------------------------
-        // TEST 16: NOP must not write a register
-        //
-        // R13 must remain AB00.
-        // --------------------------------------------------
 
         @(negedge clk);
 
@@ -761,10 +666,6 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // TEST 17: Read two final results together
-        // --------------------------------------------------
-
         read_address_a = 4'd10;
         read_address_b = 4'd13;
         #1;
@@ -780,11 +681,7 @@ module tb_Datapath_Mixed;
             errors = errors + 1;
         end
 
-        // --------------------------------------------------
-        // Final result
-        // --------------------------------------------------
-
-        $display("--------------------------------------------------");
+        $display("--");
 
         if (errors == 0)
             $display("SUCCESS: ALL MIXED DATAPATH TESTS PASSED.");
