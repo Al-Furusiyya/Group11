@@ -38,7 +38,6 @@ module tb_Datapath_Unsigned;
     ALU_RegFile_Datapath dut (
         .clk(clk),
         .reset(reset),
-
         .read_enable_a(read_enable_a),
         .read_address_a(read_address_a),
         .read_data_a(read_data_a),
@@ -57,7 +56,6 @@ module tb_Datapath_Unsigned;
 
         .external_load(external_load),
         .external_data(external_data),
-
         .flag_write_enable(flag_write_enable),
 
         .selected_rhs(selected_rhs),
@@ -89,7 +87,7 @@ module tb_Datapath_Unsigned;
         external_load = 1'b0;
         external_data = 16'h0000;
 
-        flag_write_enable = 5'b00000;
+flag_write_enable = 5'b00000;
 
         errors = 0;
 
@@ -102,7 +100,7 @@ module tb_Datapath_Unsigned;
 
             $display("PASS TEST 1: Datapath reset correctly.");
         end
-        else begin
+else begin
             $display("FAIL TEST 1: Datapath reset failed.");
             errors = errors + 1;
         end
@@ -126,8 +124,8 @@ module tb_Datapath_Unsigned;
             $display("FAIL TEST 2: R0 expected 0, got %d.",
                      read_data_a);
             errors = errors + 1;
-        end
-        @(negedge clk);
+end
+@(negedge clk);
 
         external_load = 1'b1;
         external_data = 16'd1;
@@ -148,7 +146,6 @@ module tb_Datapath_Unsigned;
                      read_data_a);
             errors = errors + 1;
         end
-
         external_load = 1'b0;
         use_immediate = 1'b0;
         use_carry = 1'b0;
@@ -162,15 +159,14 @@ module tb_Datapath_Unsigned;
         alu_op = ADD;
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd2;
         #1;
 
-        if (read_data_a === 16'd1) begin
+if (read_data_a === 16'd1) begin
             $display("PASS TEST 4: R2 = 1.");
-        end
-        else begin
+end
+else begin
             $display("FAIL TEST 4: R2 expected 1, got %d.",
                      read_data_a);
             errors = errors + 1;
@@ -256,12 +252,12 @@ module tb_Datapath_Unsigned;
 
         write_enable = 1'b0;
         read_address_a = 4'd6;
-        #1;
+#1;
 
-        if (read_data_a === 16'd8) begin
+if (read_data_a === 16'd8) begin
             $display("PASS TEST 8: R6 = 8.");
-        end
-        else begin
+end
+else begin
             $display("FAIL TEST 8: R6 expected 8, got %d.",
                      read_data_a);
             errors = errors + 1;
@@ -297,17 +293,16 @@ module tb_Datapath_Unsigned;
 
         @(posedge clk);
         #1;
-
         write_enable = 1'b0;
         read_address_a = 4'd8;
-        #1;
+#1;
 
         if (read_data_a === 16'd21) begin
             $display("PASS TEST 10: R8 = 21.");
         end
         else begin
             $display("FAIL TEST 10: R8 expected 21, got %d.",
-                     read_data_a);
+read_data_a);
             errors = errors + 1;
         end
         @(negedge clk);
@@ -326,15 +321,13 @@ module tb_Datapath_Unsigned;
 
         if (read_data_a === 16'd34) begin
             $display("PASS TEST 11: R9 = 34.");
-        end
+end
         else begin
-            $display("FAIL TEST 11: R9 expected 34, got %d.",
-                     read_data_a);
+$display("FAIL TEST 11: R9 expected 34, got %d.",
+read_data_a);
             errors = errors + 1;
-        end
-
+end
         @(negedge clk);
-
         read_address_a = 4'd8;
         read_address_b = 4'd9;
         write_address = 4'd10;
@@ -347,10 +340,10 @@ module tb_Datapath_Unsigned;
         read_address_a = 4'd10;
         #1;
 
-        if (read_data_a === 16'd55) begin
-            $display("PASS TEST 12: R10 = 55.");
-        end
-        else begin
+if (read_data_a === 16'd55) begin
+$display("PASS TEST 12: R10 = 55.");
+end
+else begin
             $display("FAIL TEST 12: R10 expected 55, got %d.",
                      read_data_a);
             errors = errors + 1;
@@ -376,12 +369,11 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
 
-        @(negedge clk);
-        read_address_a = 4'd10;
+@(negedge clk);
+read_address_a = 4'd10;
         read_address_b = 4'd11;
-        write_address = 4'd12;
+write_address = 4'd12;
         write_enable = 1'b1;
-
         @(posedge clk);
         #1;
         write_enable = 1'b0;
@@ -406,26 +398,26 @@ module tb_Datapath_Unsigned;
         write_enable = 1'b0;
         read_address_a = 4'd13;
         #1;
-        if (read_data_a === 16'd233) begin
-            $display("PASS TEST 15: R13 = 233.");
-        end
+if (read_data_a === 16'd233) begin
+$display("PASS TEST 15: R13 = 233.");
+       end
         else begin
             $display("FAIL TEST 15: R13 expected 233, got %d.",
-                     read_data_a);
-            errors = errors + 1;
+read_data_a);
+errors = errors + 1;
         end
         @(negedge clk);
 
         read_address_a = 4'd12;
         read_address_b = 4'd13;
-        write_address = 4'd14;
+write_address = 4'd14;
         write_enable = 1'b1;
 
         @(posedge clk);
         #1;
 
-        write_enable = 1'b0;
-        read_address_a = 4'd14;
+write_enable = 1'b0;
+read_address_a = 4'd14;
         #1;
 
         if (read_data_a === 16'd377) begin
@@ -437,9 +429,9 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
         @(negedge clk);
-        read_address_a = 4'd13;
+read_address_a = 4'd13;
         read_address_b = 4'd14;
-        write_address = 4'd15;
+write_address = 4'd15;
         write_enable = 1'b1;
 
         @(posedge clk);
@@ -459,31 +451,31 @@ module tb_Datapath_Unsigned;
             errors = errors + 1;
         end
         read_address_a = 4'd14;
-        read_address_b = 4'd15;
-        #1;
-        if ((read_data_a === 16'd377) &&
-            (read_data_b === 16'd610)) begin
+read_address_b = 4'd15;
+#1;
+if ((read_data_a === 16'd377) &&
+(read_data_b === 16'd610)) begin
 
             $display("PASS TEST 18: Final values are 377 and 610.");
         end
-        else begin
-            $display("FAIL TEST 18: R14=%d R15=%d.",
-                     read_data_a, read_data_b);
+else begin
+$display("FAIL TEST 18: R14=%d R15=%d.",
+read_data_a, read_data_b);
             errors = errors + 1;
-        end
-        if (stored_flags === 5'b00000) begin
-            $display("PASS TEST 19: No carry or overflow occurred.");
+end
+if (stored_flags === 5'b00000) begin
+$display("PASS TEST 19: No carry or overflow occurred.");
         end
         else begin
-            $display("FAIL TEST 19: Unexpected stored flags %b.",
-                     stored_flags);
-            errors = errors + 1;
+$display("FAIL TEST 19: Unexpected stored flags %b.",
+stored_flags);
+errors = errors + 1;
         end
-        if (errors == 0)
-            $display("SUCCESS: UNSIGNED FIBONACCI TEST PASSED.");
+if (errors == 0)
+$display("SUCCESS: UNSIGNED FIBONACCI TEST PASSED.");
         else
-            $display("FAIL: %0d UNSIGNED TEST(S) FAILED.", errors);
+$display("FAIL: %0d UNSIGNED TEST(S) FAILED.", errors);
 
         $finish;
-    end
+end
 endmodule
