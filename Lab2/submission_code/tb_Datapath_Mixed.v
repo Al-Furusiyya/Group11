@@ -31,7 +31,6 @@ module tb_Datapath_Mixed;
     wire [4:0] alu_flags;
     wire [4:0] stored_flags;
     wire [15:0] write_back_data;
-
     integer errors;
 
     localparam [3:0] ZEXT = 4'h0;
@@ -78,19 +77,17 @@ module tb_Datapath_Mixed;
         .stored_flags(stored_flags),
         .write_back_data(write_back_data)
     );
-
     always #5 clk = ~clk;
-
     initial begin
 
         clk = 1'b0;
         reset = 1'b0;
 
-        read_enable_a = 1'b1;
+        read_enable_a =1'b1;
         read_address_a = 4'd0;
 
         read_enable_b = 1'b1;
-        read_address_b = 4'd0;
+        read_address_b =4'd0;
 
         write_enable = 1'b0;
         write_address = 4'd0;
@@ -103,224 +100,198 @@ module tb_Datapath_Mixed;
         external_load = 1'b0;
         external_data = 16'h0000;
 
-        flag_write_enable = 5'b00000;
-
+        flag_write_enable =5'b00000;
         errors = 0;
-
         #1;
         reset = 1'b1;
         #1;
-
         if ((read_data_a === 16'h0000) &&
-            (read_data_b === 16'h0000) &&
-            (stored_flags === 5'b00000)) begin
+ (read_data_b === 16'h0000) &&
+  (stored_flags === 5'b00000)) begin
 
-            $display("PASS TEST 1: Datapath reset correctly.");
-        end
-        else begin
+  $display("PASS TEST 1: Datapath reset correctly.");
+ end
+ else begin
             $display("FAIL TEST 1: Datapath reset failed.");
             errors = errors + 1;
-        end
+   end
 
-        @(negedge clk);
-        reset = 1'b0;
+   @(negedge clk);
+ reset = 1'b0;
 
-        external_load = 1'b1;
-        external_data = 16'hF0F0;
-        write_enable = 1'b1;
-        write_address = 4'd1;
+    external_load = 1'b1;
+external_data = 16'hF0F0;
+write_enable = 1'b1;
+write_address = 4'd1;
+@(posedge clk);
+#1;
 
-        @(posedge clk);
+write_enable = 1'b0;
+read_address_a = 4'd1;
         #1;
+if (read_data_a === 16'hF0F0) begin
+$display("PASS TEST 2: R1 contains F0F0.");
+end
+else begin
+$display("FAIL TEST 2: R1 expected F0F0, got %h.",
+read_data_a);
+errors = errors + 1;
+     end
+@(negedge clk);
 
-        write_enable = 1'b0;
-        read_address_a = 4'd1;
-        #1;
+external_load = 1'b1;
+external_data = 16'h0FF0;
+write_enable = 1'b1;
+write_address = 4'd2;
+@(posedge clk);
+#1;
 
-        if (read_data_a === 16'hF0F0) begin
-            $display("PASS TEST 2: R1 contains F0F0.");
-        end
-        else begin
-            $display("FAIL TEST 2: R1 expected F0F0, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-
-        @(negedge clk);
-
-        external_load = 1'b1;
-        external_data = 16'h0FF0;
-        write_enable = 1'b1;
-        write_address = 4'd2;
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
+  write_enable = 1'b0;
         read_address_a = 4'd2;
         #1;
 
-        if (read_data_a === 16'h0FF0) begin
-            $display("PASS TEST 3: R2 contains 0FF0.");
-        end
-        else begin
-            $display("FAIL TEST 3: R2 expected 0FF0, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+  if (read_data_a === 16'h0FF0) begin
+    $display("PASS TEST 3: R2 contains 0FF0.");
+  end
+   else begin
+  $display("FAIL TEST 3: R2 expected 0FF0, got %h.",
+   read_data_a);
+  errors = errors + 1;
+  end
 
-        external_load = 1'b0;
-        use_carry = 1'b0;
-        flag_write_enable = 5'b00000;
-
-        @(negedge clk);
-
-        read_address_a = 4'd1;
-        read_address_b = 4'd2;
-
-        alu_op = AND;
-        use_immediate = 1'b0;
+  external_load = 1'b0;
+  use_carry = 1'b0;
+ flag_write_enable = 5'b00000;
+   @(negedge clk);
+  read_address_a = 4'd1;
+   read_address_b = 4'd2;
+   alu_op = AND;
+  use_immediate = 1'b0;
 
         write_enable = 1'b1;
         write_address = 4'd3;
-
         #1;
+  if (alu_result === 16'h00F0) begin
+     $display("PASS TEST 4A: AND produced 00F0.");
+    end
+   else begin
+   $display("FAIL TEST 4A: Expected 00F0, got %h.",
+ alu_result);
+   errors = errors + 1;
+  end
+   @(posedge clk);
+  #1;
 
-        if (alu_result === 16'h00F0) begin
-            $display("PASS TEST 4A: AND produced 00F0.");
-        end
-        else begin
-            $display("FAIL TEST 4A: Expected 00F0, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
+  write_enable = 1'b0;
+ read_address_a = 4'd3;
+  #1;
 
-        @(posedge clk);
-        #1;
+ if (read_data_a === 16'h00F0) begin
+  $display("PASS TEST 4B: R3 contains 00F0.");
+  end
+  else begin
+  $display("FAIL TEST 4B: R3 expected 00F0, got %h.",
+  read_data_a);
+  errors = errors + 1;
+  end
 
-        write_enable = 1'b0;
-        read_address_a = 4'd3;
-        #1;
+  @(negedge clk);
 
-        if (read_data_a === 16'h00F0) begin
-            $display("PASS TEST 4B: R3 contains 00F0.");
-        end
-        else begin
-            $display("FAIL TEST 4B: R3 expected 00F0, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+read_address_a = 4'd1;
+  read_address_b = 4'd2;
 
+  alu_op = OR;
+ write_enable = 1'b1;
+   write_address = 4'd4;
+  #1;
+ if (alu_result === 16'hFFF0) begin
+     $display("PASS TEST 5A: OR produced FFF0.");
+  end
+ else begin
+    $display("FAIL TEST 5A: Expected FFF0, got %h.",
+    alu_result);
+  errors = errors + 1;
+  end
+  @(posedge clk);
+  #1;
+  write_enable = 1'b0;
+  read_address_a = 4'd4;
+   #1;
+
+ if (read_data_a === 16'hFFF0) begin
+  $display("PASS TEST 5B: R4 contains FFF0.");
+  end
+ else begin
+  $display("FAIL TEST 5B: R4 expected FFF0, got %h.",
+    read_data_a);
+  errors = errors + 1;
+ end
         @(negedge clk);
 
-        read_address_a = 4'd1;
-        read_address_b = 4'd2;
+   read_address_a = 4'd1;
+ read_address_b = 4'd2;
 
-        alu_op = OR;
-        write_enable = 1'b1;
-        write_address = 4'd4;
+ alu_op = XOR;
+  write_enable = 1'b1;
+ write_address = 4'd5;
 
-        #1;
+  #1;
 
-        if (alu_result === 16'hFFF0) begin
-            $display("PASS TEST 5A: OR produced FFF0.");
-        end
-        else begin
-            $display("FAIL TEST 5A: Expected FFF0, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
+ if (alu_result === 16'hFF00) begin
+    $display("PASS TEST 6A: XOR produced FF00.");
+ end
+  else begin
+  $display("FAIL TEST 6A: Expected FF00, got %h.",
+      alu_result);
+  errors = errors + 1;
+   end
 
-        @(posedge clk);
-        #1;
+ @(posedge clk);
+   #1;
 
-        write_enable = 1'b0;
-        read_address_a = 4'd4;
-        #1;
+ write_enable = 1'b0;
+  read_address_a = 4'd5;
+    #1;
 
-        if (read_data_a === 16'hFFF0) begin
-            $display("PASS TEST 5B: R4 contains FFF0.");
-        end
-        else begin
-            $display("FAIL TEST 5B: R4 expected FFF0, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+  if (read_data_a === 16'hFF00) begin
+    $display("PASS TEST 6B: R5 contains FF00.");
+   end
+   else begin
+    $display("FAIL TEST 6B: R5 expected FF00, got %h.",
+    read_data_a);
+  errors = errors + 1;
+  end
+    @(negedge clk);
 
-        @(negedge clk);
+   read_address_a = 4'd2;
+    read_address_b = 4'd0;
 
-        read_address_a = 4'd1;
-        read_address_b = 4'd2;
-
-        alu_op = XOR;
-        write_enable = 1'b1;
-        write_address = 4'd5;
-
-        #1;
-
-        if (alu_result === 16'hFF00) begin
-            $display("PASS TEST 6A: XOR produced FF00.");
-        end
-        else begin
-            $display("FAIL TEST 6A: Expected FF00, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        read_address_a = 4'd5;
-        #1;
-
-        if (read_data_a === 16'hFF00) begin
-            $display("PASS TEST 6B: R5 contains FF00.");
-        end
-        else begin
-            $display("FAIL TEST 6B: R5 expected FF00, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-        @(negedge clk);
-
-        read_address_a = 4'd2;
-        read_address_b = 4'd0;
-
-        alu_op = NOT;
-        write_enable = 1'b1;
-        write_address = 4'd6;
-
-        #1;
-
-        if (alu_result === 16'hF00F) begin
-            $display("PASS TEST 7A: NOT produced F00F.");
-        end
-        else begin
-            $display("FAIL TEST 7A: Expected F00F, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        read_address_a = 4'd6;
-        #1;
-
-        if (read_data_a === 16'hF00F) begin
-            $display("PASS TEST 7B: R6 contains F00F.");
-        end
-        else begin
-            $display("FAIL TEST 7B: R6 expected F00F, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-        @(negedge clk);
+  alu_op = NOT;
+ write_enable = 1'b1;
+   write_address = 4'd6;
+ #1;
+   if (alu_result === 16'hF00F) begin
+   $display("PASS TEST 7A: NOT produced F00F.");
+   end
+   else begin
+    $display("FAIL TEST 7A: Expected F00F, got %h.",
+    alu_result);
+  errors = errors + 1;
+   end
+  @(posedge clk);
+  #1;
+ write_enable = 1'b0;
+ read_address_a = 4'd6;
+   #1;
+ if (read_data_a === 16'hF00F) begin
+  $display("PASS TEST 7B: R6 contains F00F.");
+ end
+  else begin
+  $display("FAIL TEST 7B: R6 expected F00F, got %h.",
+     read_data_a);
+  errors = errors + 1;
+  end
+  @(negedge clk);
 
         read_address_a = 4'd0;
         read_address_b = 4'd5;
@@ -330,232 +301,199 @@ module tb_Datapath_Mixed;
 
         write_enable = 1'b1;
         write_address = 4'd7;
+   #1;
 
-        #1;
+ if (alu_result === 16'hFF00) begin
+  $display("PASS TEST 8A: PASS produced FF00.");
+  end
+ else begin
+ $display("FAIL TEST 8A: Expected FF00, got %h.",
+    alu_result);
+  errors = errors + 1;
+   end
+  @(posedge clk);
+   #1;
+   write_enable = 1'b0;
+ read_address_a = 4'd7;
+  #1;
+ if (read_data_a === 16'hFF00) begin
+  $display("PASS TEST 8B: R7 contains FF00.");
+  end
+  else begin
+ $display("FAIL TEST 8B: R7 expected FF00, got %h.",
+   read_data_a);
+   errors = errors + 1;
+  end
+ @(negedge clk);
 
-        if (alu_result === 16'hFF00) begin
-            $display("PASS TEST 8A: PASS produced FF00.");
-        end
-        else begin
-            $display("FAIL TEST 8A: Expected FF00, got %h.",
-                     alu_result);
+   read_address_a = 4'd3;
+   read_address_b = 4'd0;
+
+  alu_op = MULT;
+  use_immediate = 1'b1;
+  immediate_value = 16'h0004;
+   write_enable = 1'b1;
+  write_address = 4'd8;
+ #1;
+
+if ((selected_rhs === 16'h0004) &&
+     (alu_result === 16'h03C0)) begin
+     $display("PASS TEST 9A: MULT produced 03C0.");
+ end
+   else begin
+     $display("FAIL TEST 9A: rhs=%h result=%h.",
+      selected_rhs, alu_result);
+  errors = errors + 1;
+  end
+
+   @(posedge clk);
+   #1;
+
+  write_enable = 1'b0;
+  use_immediate = 1'b0;
+  read_address_a = 4'd8;
+  #1;
+ if (read_data_a === 16'h03C0) begin
+ $display("PASS TEST 9B: R8 contains 03C0.");
+  end
+   else begin
+ $display("FAIL TEST 9B: R8 expected 03C0, got %h.",
+     read_data_a);
             errors = errors + 1;
-        end
+  end
 
-        @(posedge clk);
-        #1;
+ @(negedge clk);
 
-        write_enable = 1'b0;
-        read_address_a = 4'd7;
-        #1;
-
-        if (read_data_a === 16'hFF00) begin
-            $display("PASS TEST 8B: R7 contains FF00.");
-        end
-        else begin
-            $display("FAIL TEST 8B: R7 expected FF00, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-        @(negedge clk);
-
-        read_address_a = 4'd3;
+ read_address_a = 4'd8;
         read_address_b = 4'd0;
-
-        alu_op = MULT;
-        use_immediate = 1'b1;
-        immediate_value = 16'h0004;
-
-        write_enable = 1'b1;
-        write_address = 4'd8;
-
-        #1;
-
-        if ((selected_rhs === 16'h0004) &&
-            (alu_result === 16'h03C0)) begin
-
-            $display("PASS TEST 9A: MULT produced 03C0.");
-        end
-        else begin
-            $display("FAIL TEST 9A: rhs=%h result=%h.",
-                     selected_rhs, alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        use_immediate = 1'b0;
-        read_address_a = 4'd8;
-        #1;
-
-        if (read_data_a === 16'h03C0) begin
-            $display("PASS TEST 9B: R8 contains 03C0.");
-        end
-        else begin
-            $display("FAIL TEST 9B: R8 expected 03C0, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-        @(negedge clk);
-
-        read_address_a = 4'd8;
-        read_address_b = 4'd0;
-
         alu_op = LSH;
         use_immediate = 1'b1;
         immediate_value = 16'h0001;
-
         write_enable = 1'b1;
         write_address = 4'd9;
-
         #1;
+   if (alu_result === 16'h0780) begin
+$display("PASS TEST 10A: Left shift produced 0780.");
+end
+else begin
+$display("FAIL TEST 10A: Expected 0780, got %h.",
+alu_result);
+errors = errors + 1;
+end
 
-        if (alu_result === 16'h0780) begin
-            $display("PASS TEST 10A: Left shift produced 0780.");
-        end
-        else begin
-            $display("FAIL TEST 10A: Expected 0780, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        use_immediate = 1'b0;
+  @(posedge clk);
+   #1;
+    write_enable = 1'b0;
+  use_immediate = 1'b0;
+   read_address_a = 4'd9;
+   #1;
+   if (read_data_a === 16'h0780) begin
+   $display("PASS TEST 10B: R9 contains 0780.");
+ end
+  else begin
+    $display("FAIL TEST 10B: R9 expected 0780, got %h.",
+         read_data_a);
+   errors = errors + 1;
+  end
+        @(negedge clk);
         read_address_a = 4'd9;
+   read_address_b = 4'd0;
+  alu_op = LSH;
+  use_immediate =1'b1;
+   immediate_value = 16'hFFFE;
+  write_enable = 1'b1;
+  write_address = 4'd10;
+ #1;
+  if (alu_result === 16'h01E0) begin
+    $display("PASS TEST 11A: Right shift produced 01E0.");
+ end
+ else begin
+   $display("FAIL TEST 11A: Expected 01E0, got %h.",
+    alu_result);
+  errors = errors + 1;
+  end
+ @(posedge clk);
         #1;
+ write_enable = 1'b0;
+   use_immediate = 1'b0;
+ read_address_a = 4'd10;
+ #1;
+  if (read_data_a === 16'h01E0) begin
+   $display("PASS TEST 11B: R10 contains 01E0.");
+   end
+  else begin
+   $display("FAIL TEST 11B: R10 expected 01E0, got %h.",
+     read_data_a);
+   errors = errors + 1;
+   end
+ @(negedge clk);
+   read_address_a = 4'd0;
+ read_address_b = 4'd0;
 
-        if (read_data_a === 16'h0780) begin
-            $display("PASS TEST 10B: R9 contains 0780.");
-        end
-        else begin
-            $display("FAIL TEST 10B: R9 expected 0780, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+ alu_op = ZEXT;
+ use_immediate = 1'b1;
+ immediate_value = 16'hFF80;
 
-        @(negedge clk);
+ write_enable = 1'b1;
+ write_address = 4'd11;
+  #1;
+        if (alu_result ===16'h0080) begin
+   $display("PASS TEST 12A: ZEXT produced 0080.");
+  end
+   else begin
+  $display("FAIL TEST 12A: Expected 0080, got %h.",
+   alu_result);
+  errors = errors + 1;
+   end
+  @(posedge clk);
+ #1;
 
-        read_address_a = 4'd9;
-        read_address_b = 4'd0;
+ write_enable = 1'b0;
+ use_immediate = 1'b0;
+  read_address_a = 4'd11;
+ #1;
 
-        alu_op = LSH;
-        use_immediate = 1'b1;
-        immediate_value = 16'hFFFE;
+ if (read_data_a === 16'h0080) begin
+   $display("PASS TEST 12B: R11 contains 0080.");
+   end
+  else begin
+   $display("FAIL TEST 12B: R11 expected 0080, got %h.",
+    read_data_a);
+  errors = errors + 1;
+ end
+   @(negedge clk);
 
-        write_enable = 1'b1;
-        write_address = 4'd10;
-
-        #1;
-
-        if (alu_result === 16'h01E0) begin
-            $display("PASS TEST 11A: Right shift produced 01E0.");
-        end
-        else begin
-            $display("FAIL TEST 11A: Expected 01E0, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        use_immediate = 1'b0;
-        read_address_a = 4'd10;
-        #1;
-
-        if (read_data_a === 16'h01E0) begin
-            $display("PASS TEST 11B: R10 contains 01E0.");
-        end
-        else begin
-            $display("FAIL TEST 11B: R10 expected 01E0, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-        @(negedge clk);
-
-        read_address_a = 4'd0;
-        read_address_b = 4'd0;
-
-        alu_op = ZEXT;
-        use_immediate = 1'b1;
-        immediate_value = 16'hFF80;
-
-        write_enable = 1'b1;
-        write_address = 4'd11;
-
-        #1;
-
-        if (alu_result === 16'h0080) begin
-            $display("PASS TEST 12A: ZEXT produced 0080.");
-        end
-        else begin
-            $display("FAIL TEST 12A: Expected 0080, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        use_immediate = 1'b0;
-        read_address_a = 4'd11;
-        #1;
-
-        if (read_data_a === 16'h0080) begin
-            $display("PASS TEST 12B: R11 contains 0080.");
-        end
-        else begin
-            $display("FAIL TEST 12B: R11 expected 0080, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
-
-        @(negedge clk);
-
-        alu_op = SEXT;
-        use_immediate = 1'b1;
+ alu_op = SEXT;
+  use_immediate = 1'b1;
         immediate_value = 16'h0080;
+  write_enable = 1'b1;
+   write_address = 4'd12;
+  #1;
 
-        write_enable = 1'b1;
-        write_address = 4'd12;
+   if (alu_result === 16'hFF80) begin
+    $display("PASS TEST 13A: SEXT produced FF80.");
+  end
+   else begin
+   $display("FAIL TEST 13A: Expected FF80, got %h.",
+     alu_result);
+  errors = errors + 1;
+     end
+@(posedge clk);
+   #1;
 
-        #1;
+    write_enable = 1'b0;
+use_immediate = 1'b0;
+read_address_a = 4'd12;
+   #1;
 
-        if (alu_result === 16'hFF80) begin
-            $display("PASS TEST 13A: SEXT produced FF80.");
-        end
-        else begin
-            $display("FAIL TEST 13A: Expected FF80, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
-
-        @(posedge clk);
-        #1;
-
-        write_enable = 1'b0;
-        use_immediate = 1'b0;
-        read_address_a = 4'd12;
-        #1;
-
-        if (read_data_a === 16'hFF80) begin
-            $display("PASS TEST 13B: R12 contains FF80.");
-        end
-        else begin
-            $display("FAIL TEST 13B: R12 expected FF80, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+  if (read_data_a ===16'hFF80) begin
+   $display("PASS TEST 13B: R12 contains FF80.");
+   end
+    else begin
+     $display("FAIL TEST 13B: R12 expected FF80, got %h.",
+        read_data_a);
+    errors = errors + 1;
+    end
 
         @(negedge clk);
 
@@ -569,34 +507,34 @@ module tb_Datapath_Mixed;
         #1;
 
         if (alu_result === 16'hAB00) begin
-            $display("PASS TEST 14A: LUI produced AB00.");
-        end
+    $display("PASS TEST 14A: LUI produced AB00.");
+   end
         else begin
-            $display("FAIL TEST 14A: Expected AB00, got %h.",
-                     alu_result);
-            errors = errors + 1;
-        end
+      $display("FAIL TEST 14A: Expected AB00, got %h.",
+        alu_result);
+         errors = errors + 1;
+   end
 
-        @(posedge clk);
+  @(posedge clk);
         #1;
 
         write_enable = 1'b0;
-        use_immediate = 1'b0;
+        use_immediate =1'b0;
         read_address_a = 4'd13;
         #1;
 
         if (read_data_a === 16'hAB00) begin
             $display("PASS TEST 14B: R13 contains AB00.");
-        end
-        else begin
-            $display("FAIL TEST 14B: R13 expected AB00, got %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+end
+else begin
+$display("FAIL TEST 14B: R13 expected AB00, got %h.",
+read_data_a);
+errors = errors + 1;
+  end
 
-        @(negedge clk);
+  @(negedge clk);
 
-        read_address_a = 4'd11;
+ read_address_a = 4'd11;
         read_address_b = 4'd13;
 
         alu_op = CMPU;
@@ -607,89 +545,80 @@ module tb_Datapath_Mixed;
 
         #1;
 
-        if (alu_flags === 5'b01000) begin
+if (alu_flags === 5'b01000) begin
             $display("PASS TEST 15A: CMPU set the L flag.");
-        end
-        else begin
+end
+else begin
             $display("FAIL TEST 15A: Expected 01000, got %b.",
                      alu_flags);
-            errors = errors + 1;
+            errors = errors +1;
         end
 
         @(posedge clk);
         #1;
+flag_write_enable = 5'b00000;
 
-        flag_write_enable = 5'b00000;
-
-        if (stored_flags === 5'b01000) begin
-            $display("PASS TEST 15B: L flag stored correctly.");
-        end
+if (stored_flags === 5'b01000) begin
+$display("PASS TEST 15B: L flag stored correctly.");
+end
         else begin
-            $display("FAIL TEST 15B: Expected 01000, got %b.",
-                     stored_flags);
-            errors = errors + 1;
-        end
+$display("FAIL TEST 15B: Expected 01000, got %b.",
+      stored_flags);
+     errors = errors + 1;
+  end
 
-        @(negedge clk);
+  @(negedge clk);
 
         read_address_a = 4'd13;
         read_address_b = 4'd0;
+alu_op = NOP;
+  write_enable = 1'b0;
 
-        alu_op = NOP;
-        write_enable = 1'b0;
+#1;
+if ((alu_result === 16'h0000) &&
+(alu_flags === 5'b00000)) begin
 
-        #1;
-
-        if ((alu_result === 16'h0000) &&
-            (alu_flags === 5'b00000)) begin
-
-            $display("PASS TEST 16A: NOP output is zero.");
+$display("PASS TEST 16A: NOP output is zero.");
         end
-        else begin
-            $display("FAIL TEST 16A: result=%h flags=%b.",
-                     alu_result, alu_flags);
+else begin
+$display("FAIL TEST 16A: result=%h flags=%b.",
+alu_result, alu_flags);
             errors = errors + 1;
-        end
-
-        @(posedge clk);
+end
+@(posedge clk);
         #1;
-
         read_address_a = 4'd13;
-        #1;
-
-        if (read_data_a === 16'hAB00) begin
+#1;
+if (read_data_a === 16'hAB00) begin
             $display("PASS TEST 16B: NOP preserved R13.");
         end
         else begin
-            $display("FAIL TEST 16B: R13 changed to %h.",
-                     read_data_a);
-            errors = errors + 1;
-        end
+$display("FAIL TEST 16B: R13 changed to %h.",
+read_data_a);
+errors = errors + 1;
+  end
+ read_address_a = 4'd10;
+   read_address_b = 4'd13;
+  #1;
 
-        read_address_a = 4'd10;
-        read_address_b = 4'd13;
-        #1;
+ if ((read_data_a === 16'h01E0) &&
+   (read_data_b === 16'hAB00)) begin
+   $display("PASS TEST 17: Final mixed results correct.");
+  end
+   else begin
+  $display("FAIL TEST 17: R10=%h R13=%h.",
+           read_data_a, read_data_b);
+  errors = errors +1;
+   end
 
-        if ((read_data_a === 16'h01E0) &&
-            (read_data_b === 16'hAB00)) begin
+ $display("--");
 
-            $display("PASS TEST 17: Final mixed results correct.");
-        end
-        else begin
-            $display("FAIL TEST 17: R10=%h R13=%h.",
-                     read_data_a, read_data_b);
-            errors = errors + 1;
-        end
+   if (errors == 0)
+       $display("SUCCESS: ALL MIXED DATAPATH TESTS PASSED.");
+   else
+        $display("FAIL: %0d MIXED TEST(S) FAILED.", errors);
 
-        $display("--");
+$finish;
 
-        if (errors == 0)
-            $display("SUCCESS: ALL MIXED DATAPATH TESTS PASSED.");
-        else
-            $display("FAIL: %0d MIXED TEST(S) FAILED.", errors);
-
-        $finish;
-
-    end
-
+end
 endmodule
