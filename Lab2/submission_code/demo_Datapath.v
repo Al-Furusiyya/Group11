@@ -54,15 +54,9 @@ module demo_Datapath (
     localparam [3:0] NOT  = 4'hC;
     localparam [3:0] NOP  = 4'hF;
 
-    // KEY0 is active-low on the FPGA board.
     wire reset;
 
     assign reset = ~KEY[0];
-
-    // Slow counter
-    //
-    // CLOCK_50 runs at 50 MHz.
-    // 25,000,000 cycles is approximately 0.5 seconds.
 
     reg [25:0] slow_counter;
     wire step_enable;
@@ -70,7 +64,6 @@ module demo_Datapath (
     assign step_enable =
         (slow_counter == 26'd24999999);
 
-    // Current demonstration state
     reg [3:0] state;
 
     always @(posedge CLOCK_50 or posedge reset) begin
@@ -90,7 +83,6 @@ module demo_Datapath (
         end
     end
 
-    // Advance to the next operation every half-second.
     always @(posedge CLOCK_50 or posedge reset) begin
         if (reset) begin
             state <= 4'd0;
@@ -106,7 +98,6 @@ module demo_Datapath (
     end
 
     
-    // Datapath control signals
 
     reg read_enable_a;
     reg [3:0] read_address_a;
@@ -135,11 +126,9 @@ module demo_Datapath (
     wire [4:0] stored_flags;
     wire [15:0] write_back_data;
 
-    // Simple control sequence
 
     always @(state or SW or step_enable) begin
 
-        // Default control values
         read_enable_a = 1'b1;
         read_address_a = 4'd0;
 
@@ -378,7 +367,6 @@ module demo_Datapath (
         endcase
     end
 
-    // Complete ALU and Register File datapath
 
     ALU_RegFile_Datapath datapath (
         .clk(CLOCK_50),
@@ -412,9 +400,6 @@ module demo_Datapath (
         .write_back_data(write_back_data)
     );
 
-    // During the operation sequence, display the value that
-    // is about to be written.
-    //
     // In state F, display the selected register.
     wire [15:0] display_value;
 
@@ -467,13 +452,11 @@ module demo_Datapath (
 endmodule
 
 
-// Active-low hexadecimal seven-segment decoder
 module hex_to_seven_segment (
     input wire [3:0] hex_value,
     output reg [6:0] segments
 );
 
-    // Explicit sensitivity list.
     always @(hex_value) begin
         case (hex_value)
             4'h0: segments = 7'b1000000;
