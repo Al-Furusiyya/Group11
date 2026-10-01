@@ -24,12 +24,12 @@ module demo_BRAM
     wire [2:0] state_debug;
     wire [1:0] group_debug;
 
-    // KEY0 is active-low on the DE1-SoC board.
+    // KEY0 is active-low
     assign reset = ~KEY[0];
 
-    // SW0 selects which value appears on HEX3 through HEX0.
+    // SW0 selects which value appears on HEX3 through HEX0
     // SW0 down: original value
-    // SW0 up:   updated value
+    // SW0 up: updated value
     assign displayed_data = SW[0] ? updated_data : original_data;
 
     // LED status outputs
@@ -51,7 +51,6 @@ module demo_BRAM
         .group_debug(group_debug)
     );
 
-    // Display the selected 16-bit value.
     hex_to_seven_segment display0 (
         .hex_value(displayed_data[3:0]),
         .segments(HEX0)
@@ -72,13 +71,11 @@ module demo_BRAM
         .segments(HEX3)
     );
 
-    // HEX4 displays the final FSM state.
     hex_to_seven_segment display4 (
         .hex_value({1'b0, state_debug}),
         .segments(HEX4)
     );
 
-    // HEX5 displays the address-group number.
     hex_to_seven_segment display5 (
         .hex_value({2'b00, group_debug}),
         .segments(HEX5)
