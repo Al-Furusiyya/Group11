@@ -121,7 +121,6 @@ $display("FAIL TEST 4: q_b=%h", q_b);
 error_count = error_count + 1;
         end
 
-        // Test port A write-first behavior
 @(negedge clk);
 en_a = 1'b1;
 we_a = 1'b1;
