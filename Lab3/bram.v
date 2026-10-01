@@ -1,5 +1,4 @@
-// True dual-port block RAM
-// 1024 words, 16 bits per word
+// 1024 words 16 bits per word
 // Both ports use the same clock
 
 module bram
