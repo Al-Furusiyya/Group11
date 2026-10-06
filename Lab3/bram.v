@@ -31,29 +31,30 @@ $readmemh("memory_init.hex", ram);
     end
 
 // Port A
-always @(posedge clk) begin
-if (en_a) begin
-if (we_a) begin
-ram[addr_a] <= data_a;
-q_a <= data_a;
-end
-else begin
-q_a <= ram[addr_a];
-end
-end
+    always @(posedge clk) begin
+        if (en_a) begin
+            if (we_a) begin
+                ram[addr_a] <= data_a;
+                q_a <= data_a;
+            end
+            else begin
+                q_a <= ram[addr_a];
+            end
+        end
     
     end
 
     // Port B
-always @(posedge clk) begin
-if (en_b) begin
-if (we_b) begin
-ram[addr_b] <= data_b;
-q_b <= data_b;
-end
-else begin
-q_b <= ram[addr_b];
-end
-end
+    always @(posedge clk) begin
+        if (en_b) begin
+            if (we_b) begin
+                ram[addr_b] <= data_b;
+                q_b <= data_b;
+            end
+            else begin
+                q_b <= ram[addr_b];
+            end
+        end
+    end
 
 endmodule
