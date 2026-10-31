@@ -94,11 +94,9 @@ hex_to_seven_segment display3 (
     hex_to_seven_segment display5 (
 .hex_value(program_done ? 4'hD : {1'b0, state}),
 .segments(HEX5)
-    );
+);
 
 endmodule
-
-
 module hex_to_seven_segment (
     input wire [3:0] hex_value,
 output reg [6:0] segments
