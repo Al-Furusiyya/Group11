@@ -1,29 +1,47 @@
-// Retro four-lane intersection -- graphics renderer only.
-// 640 x 480 output; all art uses a 320 x 240 grid, doubled to 2 x 2 pixels.
-// Light decisions live in traffic_switch_control.v. This file never reads SW.
-// Pedestrian states/counts are display inputs, not a running countdown.
+// Retro isometric intersection -- STATIC GRAPHICS ONLY.
+// Compact left menu is unchanged. The right intersection is zoomed out,
+// with smaller cars and queue space for five cars per incoming lane.
+// Timer digits are static examples, not live countdowns.
+// Bracketed keys are labels only; this module does not process key presses.
+// 640 x 480 output. Menu and timer cards retain their 2 x 2 pixel scale.
+// Roads, car sprites, signals, and roadside people use native VGA pixels.
+// Drop-in replacement for the original vga_scene.v. No clock, RAM files,
+// traffic FSM, CPU interface, animation, or working menu is required.
+// test_switches is retained only to match the existing demo_VGA ports.
 
 module vga_scene (
-    input wire visible,
-    input wire [9:0] pixel_x, pixel_y,
-    input wire [1:0] light_ns, light_ew,
-    input wire [3:0] ped_walk,
-    input wire [31:0] ped_counts_bcd,
-    output wire [7:0] red, green, blue
+    input  wire       visible,
+    input  wire [9:0] pixel_x,
+    input  wire [9:0] pixel_y,
+    input  wire [2:0] test_switches,
+    output wire [7:0] red,
+    output wire [7:0] green,
+    output wire [7:0] blue
 );
-    localparam MENU_EDGE = 91;
-    localparam CENTER_X = 208, CENTER_Y = 126;
-    localparam ROAD_HALF = 48;
-    localparam [1:0] LIGHT_RED = 2'd0;
-    localparam [1:0] LIGHT_YELLOW = 2'd1;
-    localparam [1:0] LIGHT_GREEN = 2'd2;
 
-    // Each road has two incoming and two outgoing lanes.
-    // Rotated view: N=upper-left, E=upper-right, S=lower-right, W=lower-left.
-    localparam N_CAR_X = 111, N_CAR_Y = 85;
-    localparam E_CAR_X = 291, E_CAR_Y = 78;
-    localparam S_CAR_X = 297, S_CAR_Y = 164;
-    localparam W_CAR_X = 125, W_CAR_Y = 175;
+    // Menu coordinates stay on the original 320 x 240 artwork grid.
+    // The road center and car anchors now use native 640 x 480 pixels.
+    localparam MENU_EDGE = 75;
+    localparam CENTER_X  = 396;
+    localparam CENTER_Y  = 256;
+    localparam ROAD_HALF = 60;
+
+    // One visible car per approach. Each sprite now occupies at most
+    // 32 x 24 VGA pixels instead of the previous 64 x 48 VGA pixels.
+    localparam NW_CAR_X = 302, NW_CAR_Y = 216;
+    localparam NE_CAR_X = 476, NE_CAR_Y = 209;
+    localparam SW_CAR_X = 316, SW_CAR_Y = 303;
+    localparam SE_CAR_X = 490, SE_CAR_Y = 296;
+
+    // Reserved queue geometry for later software, not live car storage:
+    // Slot k ranges from 0 to 4. Move each later slot away from the stop.
+    // NW/N: anchor + (-28*k, -14*k)
+    // NE/E: anchor + ( 28*k, -14*k)
+    // SW/W: anchor + (-28*k,  14*k)
+    // SE/S: anchor + ( 28*k,  14*k)
+    // Adjacent straight/right lane offsets from these left-lane anchors:
+    // NW/N (-15,+8), NE/E (-15,-8), SW/W (+15,+8), SE/S (+15,-8).
+    // Five cars fit in either incoming lane; only slot zero is drawn now.
 
     // Palette indices. The same 16 flat colors are used everywhere.
     localparam [3:0] BLACK       = 4'd0;
@@ -74,8 +92,6 @@ module vga_scene (
         begin
             case (character)
                 8'h20: glyph = 35'h000000000; //  
-                8'h5B: glyph = 35'h39084210E; // [
-                8'h5D: glyph = 35'h38421084E; // ]
                 8'h2D: glyph = 35'h0000F8000; // -
                 8'h30: glyph = 35'h3A33AE62E; // 0
                 8'h31: glyph = 35'h11842108E; // 1
@@ -113,17 +129,19 @@ module vga_scene (
                 8'h58: glyph = 35'h462A22A31; // X
                 8'h59: glyph = 35'h462A21084; // Y
                 8'h5A: glyph = 35'h7C222221F; // Z
+                8'h5B: glyph = 35'h39084210E; // [
+                8'h5D: glyph = 35'h38421084E; // ]
                 default: glyph = 35'd0;
             endcase
         end
     endfunction
 
     // Each character occupies a 6 x 8 cell. Strings are right-aligned
-    // in this 16-character argument, as with a normal Verilog string.
+    // in this 12-character argument, as with a normal Verilog string.
     function text_pixel;
         input [8:0] px, py;
         input integer left, top, count;
-        input [127:0] message;
+        input [95:0] message;
         reg signed [10:0] tx, ty;
         integer i;
         reg [34:0] bits;
@@ -137,11 +155,60 @@ module vga_scene (
             // The loop is expanded during synthesis. Every message and
             // character is constant: no divider or runtime string engine.
             if (tx >= 0 && tx < count*6 && ty >= 0 && ty < 7) begin
-                for (i=0; i<16; i=i+1) begin
+                for (i=0; i<12; i=i+1) begin
                     if (i < count && tx >= i*6 && tx < i*6+5) begin
                         bits = glyph(message >> ((count-1-i)*8));
                         bit_index = 34 - ty*5 - (tx-i*6);
                         text_pixel = bits[bit_index];
+                    end
+                end
+            end
+        end
+    endfunction
+
+    // Compact 3 x 5 font for the single-line PEDESTRIAN [P] heading.
+    // The normal 5 x 7 text remains unchanged for all other menu labels.
+    function [14:0] compact_glyph;
+        input [7:0] character;
+        begin
+            case (character)
+                "A": compact_glyph = {3'b010,3'b101,3'b111,3'b101,3'b101};
+                "D": compact_glyph = {3'b110,3'b101,3'b101,3'b101,3'b110};
+                "E": compact_glyph = {3'b111,3'b100,3'b110,3'b100,3'b111};
+                "I": compact_glyph = {3'b111,3'b010,3'b010,3'b010,3'b111};
+                "N": compact_glyph = {3'b101,3'b111,3'b111,3'b111,3'b101};
+                "P": compact_glyph = {3'b110,3'b101,3'b110,3'b100,3'b100};
+                "R": compact_glyph = {3'b110,3'b101,3'b110,3'b101,3'b101};
+                "S": compact_glyph = {3'b111,3'b100,3'b111,3'b001,3'b111};
+                "T": compact_glyph = {3'b111,3'b010,3'b010,3'b010,3'b010};
+                "[": compact_glyph = {3'b110,3'b100,3'b100,3'b100,3'b110};
+                "]": compact_glyph = {3'b011,3'b001,3'b001,3'b001,3'b011};
+                default: compact_glyph = 15'd0;
+            endcase
+        end
+    endfunction
+
+    // Four columns per character; supports this 14-character heading.
+    function compact_text_pixel;
+        input [8:0] px, py;
+        input integer left, top, count;
+        input [111:0] message;
+        reg signed [10:0] tx, ty;
+        integer i;
+        reg [14:0] bits;
+        reg [3:0] bit_index;
+        begin
+            compact_text_pixel = 1'b0;
+            tx = $signed({2'b00,px}) - left;
+            ty = $signed({2'b00,py}) - top;
+            bits = 15'd0;
+            bit_index = 4'd0;
+            if (tx >= 0 && tx < count*4 && ty >= 0 && ty < 5) begin
+                for (i=0; i<14; i=i+1) begin
+                    if (i < count && tx >= i*4 && tx < i*4+3) begin
+                        bits = compact_glyph(message >> ((count-1-i)*8));
+                        bit_index = 14 - ty*3 - (tx-i*4);
+                        compact_text_pixel = bits[bit_index];
                     end
                 end
             end
@@ -241,7 +308,7 @@ module vga_scene (
     // Overlay functions return {opaque, palette_index}. Transparent
     // pixels preserve whichever road/background pixel is underneath.
     function [4:0] car_pixel;
-        input [8:0] px, py;
+        input [9:0] px, py;
         input integer anchor_x, anchor_y;
         input [1:0] direction, paint;
         reg signed [10:0] sx, sy;
@@ -277,77 +344,12 @@ module vga_scene (
         end
     endfunction
 
-    function [3:0] light_color;
-        input [1:0] state;
-        begin
-            case (state)
-                LIGHT_YELLOW: light_color = YELLOW;
-                LIGHT_GREEN:  light_color = GREEN;
-                default:      light_color = CORAL;
-            endcase
-        end
-    endfunction
-
-    function light_word_pixel;
-        input [8:0] px, py;
-        input integer left, top;
-        input [1:0] state;
-        begin
-            case (state)
-                LIGHT_YELLOW: light_word_pixel = text_pixel(px,py,left,top,6,"YELLOW");
-                LIGHT_GREEN:  light_word_pixel = text_pixel(px,py,left,top,5,"GREEN");
-                default:      light_word_pixel = text_pixel(px,py,left,top,3,"RED");
-            endcase
-        end
-    endfunction
-
-    function digit_pixel;
-        input [8:0] px, py;
-        input integer left, top;
-        input [3:0] digit;
-        reg signed [10:0] sx, sy;
-        reg [34:0] bits;
-        reg [5:0] bit_index;
-        begin
-            digit_pixel = 1'b0;
-            sx = $signed({2'b00,px})-left;
-            sy = $signed({2'b00,py})-top;
-            bits = 35'd0;
-            bit_index = 6'd0;
-            if (sx >= 0 && sx < 5 && sy >= 0 && sy < 7) begin
-                if (digit <= 9) bits = glyph(8'h30 + {4'b0000,digit});
-                else bits = glyph(8'h2D);
-                bit_index = 34-sy*5-sx;
-                digit_pixel = bits[bit_index];
-            end
-        end
-    endfunction
-
-    function count_pixel;
-        input [8:0] px, py;
-        input integer left, top;
-        input [7:0] seconds_bcd;
-        begin
-            count_pixel = digit_pixel(px,py,left,top,seconds_bcd[7:4]) ||
-                          digit_pixel(px,py,left+6,top,seconds_bcd[3:0]);
-        end
-    endfunction
-
-    function ped_word_pixel;
-        input [8:0] px, py;
-        input integer left, top;
-        input walk;
-        begin
-            if (walk) ped_word_pixel = text_pixel(px,py,left,top,4,"WALK");
-            else      ped_word_pixel = text_pixel(px,py,left,top,4,"WAIT");
-        end
-    endfunction
-
-    // Only the selected lamp is bright. Reserved states display red.
+    // Upright three-lamp traffic-light sprite, with a small curb post.
+    // go is a fixed artwork choice here, not a controller output.
     function [4:0] signal_pixel;
-        input [8:0] px, py;
+        input [9:0] px, py;
         input integer left, top;
-        input [1:0] state;
+        input go;
         reg signed [10:0] sx, sy;
         begin
             signal_pixel = 5'd0;
@@ -361,320 +363,333 @@ module vga_scene (
                     signal_pixel = {1'b1, BLACK};
                 if (sx >= 3 && sx < 8) begin
                     if (sy >= 3 && sy < 8)
-                        signal_pixel = {1'b1, ((state == LIGHT_YELLOW || state == LIGHT_GREEN) ? DIM_RED : CORAL)};
+                        signal_pixel = {1'b1, (go ? DIM_RED : CORAL)};
                     if (sy >= 9 && sy < 14)
-                        signal_pixel = {1'b1, ((state == LIGHT_YELLOW) ? YELLOW : DIM_YELLOW)};
+                        signal_pixel = {1'b1, DIM_YELLOW};
                     if (sy >= 15 && sy < 20)
-                        signal_pixel = {1'b1, ((state == LIGHT_GREEN) ? GREEN : DIM_GREEN)};
+                        signal_pixel = {1'b1, (go ? GREEN : DIM_GREEN)};
                 end
             end
         end
     endfunction
 
-    // Shared small pedestrian icon, also used for the four curb pedestrians.
-    function [6:0] person_row;
-        input [3:0] row;
-        begin
-            case (row)
-                0,1: person_row = 7'b0011100;
-                2:   person_row = 7'b0001000;
-                3:   person_row = 7'b0111110;
-                4,5: person_row = 7'b1011101;
-                6:   person_row = 7'b0011100;
-                7:   person_row = 7'b0010100;
-                8,9,10: person_row = 7'b0100010;
-                default: person_row = 7'd0;
-            endcase
-        end
-    endfunction
-
-    function person_pixel;
-        input [8:0] px, py;
-        input integer left, top;
-        reg signed [10:0] sx, sy;
-        reg [6:0] bits;
-        begin
-            person_pixel = 1'b0;
-            sx = $signed({2'b00,px})-left;
-            sy = $signed({2'b00,py})-top;
-            bits = 7'd0;
-            if (sx >= 0 && sx < 7 && sy >= 0 && sy < 11) begin
-                bits = person_row(sy[3:0]);
-                person_pixel = bits[6-sx[2:0]];
-            end
-        end
-    endfunction
-
-    // Direction letter + pedestrian icon + two-digit BCD timer display.
-    function [4:0] ped_head_pixel;
-        input [8:0] px, py;
-        input integer left, top;
-        input [7:0] direction_letter;
-        input walk;
-        input [7:0] seconds_bcd;
-        reg signed [10:0] sx, sy;
-        reg [127:0] direction_text;
-        begin
-            ped_head_pixel = 5'd0;
-            sx = $signed({2'b00,px})-left;
-            sy = $signed({2'b00,py})-top;
-            direction_text = {120'd0,direction_letter};
-            if (sx >= 0 && sx < 24 && sy >= 0 && sy < 24) begin
-                ped_head_pixel = {1'b1, GRAY};
-                if (sx >= 1 && sx < 23 && sy >= 1 && sy < 23)
-                    ped_head_pixel = {1'b1, BLACK};
-                if (text_pixel(px,py,left+3,top+3,1,direction_text))
-                    ped_head_pixel = {1'b1, WHITE};
-                if (person_pixel(px,py,left+13,top+2))
-                    ped_head_pixel = {1'b1, (walk ? GREEN : CORAL)};
-                if (count_pixel(px,py,left+6,top+15,seconds_bcd))
-                    ped_head_pixel = {1'b1, YELLOW};
-            end
-        end
-    endfunction
-
-    // These road-plane arrows rotate with each incoming approach.
-    // r is the driver's right; f is forward. The inner lane turns left.
+    // An arrow is drawn in road coordinates, so it follows the same
+    // diagonal projection as the lanes. Forward points into the junction;
+    // right_side increases toward the driver's right.
     function lane_arrow_pixel;
-        input signed [11:0] road_u, road_v;
-        input [1:0] approach;
-        input straight_right;
-        reg signed [11:0] r, f, lateral, abs_r, abs_f, bend_distance;
+        input signed [11:0] forward, right_side;
+        input left_only;
+        reg signed [11:0] abs_right, bend_distance;
         begin
-            lateral = straight_right ? 12'sd36 : 12'sd14;
-            case (approach)
-                2'd0: begin r= road_u-lateral; f= road_v+124; end
-                2'd1: begin r=-road_v-lateral; f= road_u+124; end
-                2'd2: begin r=-road_u-lateral; f=-road_v+124; end
-                default: begin r=road_v-lateral; f=-road_u+124; end
-            endcase
-            abs_r = (r < 0) ? -r : r;
-            abs_f = (f < 0) ? -f : f;
-            bend_distance = (f < 4) ? 4-f : f-4;
             lane_arrow_pixel = 1'b0;
-            if (straight_right) begin
-                if ((abs_r <= 2 && f >= -14 && f <= 10) ||
-                    (f >= 9 && f <= 17 && abs_r <= 17-f) ||
-                    (r >= 0 && r <= 7 && abs_f <= 2) ||
-                    (r >= 4 && r <= 10 && abs_f <= 10-r))
+            abs_right = (right_side < 0) ? -right_side : right_side;
+            bend_distance = (forward < 2) ? 2-forward : forward-2;
+
+            if (left_only) begin
+                // Stem, left bend, and left-facing arrowhead.
+                if ((abs_right <= 1 && forward >= -16 && forward <= 3) ||
+                    (forward >= 1 && forward <= 3 &&
+                     right_side >= -10 && right_side <= 0) ||
+                    (right_side >= -10 && right_side <= -4 &&
+                     bend_distance <= right_side+10))
                     lane_arrow_pixel = 1'b1;
             end
             else begin
-                if ((abs_r <= 2 && f >= -14 && f <= 4) ||
-                    (r >= -7 && r <= 0 && f >= 2 && f <= 6) ||
-                    (r >= -10 && r <= -4 && bend_distance <= r+10))
+                // Straight stem and arrowhead, with a right-turn branch.
+                if ((abs_right <= 1 && forward >= -16 && forward <= 15) ||
+                    (forward >= 9 && forward <= 17 &&
+                     abs_right <= 17-forward) ||
+                    (forward >= 1 && forward <= 3 &&
+                     right_side >= 0 && right_side <= 10) ||
+                    (right_side >= 4 && right_side <= 10 &&
+                     bend_distance <= 10-right_side))
                     lane_arrow_pixel = 1'b1;
             end
         end
     endfunction
 
-    // A flat pixel-art control box, independent of input or menu logic.
-    function [4:0] ui_box_pixel;
-        input [8:0] px, py;
-        input integer left, top, width, height;
-        input [3:0] border_color;
+    // A small standing pedestrian. The same silhouette is used beside
+    // each crossing and, in red, inside the pedestrian timer cards.
+    function [4:0] pedestrian_pixel;
+        input [9:0] px, py;
+        input integer left, top;
+        input [3:0] color;
         reg signed [10:0] sx, sy;
         begin
-            ui_box_pixel = 5'd0;
+            pedestrian_pixel = 5'd0;
             sx = $signed({2'b00,px})-left;
             sy = $signed({2'b00,py})-top;
-            if (sx >= 0 && sx < width && sy >= 0 && sy < height) begin
-                ui_box_pixel = {1'b1,border_color};
-                if (sx >= 1 && sx < width-1 && sy >= 1 && sy < height-1)
-                    ui_box_pixel = {1'b1,ASPHALT};
+            if ((sx >= 2 && sx <= 4 && sy >= 0 && sy <= 2) ||
+                (sx >= 2 && sx <= 4 && sy >= 4 && sy <= 8) ||
+                (sx >= 0 && sx <= 6 && sy >= 4 && sy <= 5) ||
+                (sx >= 1 && sx <= 2 && sy >= 8 && sy <= 12) ||
+                (sx >= 4 && sx <= 5 && sy >= 8 && sy <= 12))
+                pedestrian_pixel = {1'b1, color};
+        end
+    endfunction
+
+    // Static timer display card: direction, red pedestrian, two digits.
+    // Digit arguments are ASCII characters, ready to be replaced by
+    // controller/CPU-provided values in a later integration step.
+    function [4:0] pedestrian_timer_pixel;
+        input [8:0] px, py;
+        input integer left, top;
+        input [7:0] direction, tens, ones;
+        reg signed [10:0] sx, sy;
+        reg [4:0] person;
+        begin
+            pedestrian_timer_pixel = 5'd0;
+            sx = $signed({2'b00,px})-left;
+            sy = $signed({2'b00,py})-top;
+            person = 5'd0;
+            if (sx >= 0 && sx < 30 && sy >= 0 && sy < 29) begin
+                pedestrian_timer_pixel = {1'b1, GRAY};
+                if (sx >= 1 && sx < 29 && sy >= 1 && sy < 28)
+                    pedestrian_timer_pixel = {1'b1, BLACK};
+                if (text_pixel(px,py,left+3,top+4,1,direction))
+                    pedestrian_timer_pixel = {1'b1, WHITE};
+                person = pedestrian_pixel(px,py,left+19,top+3,CORAL);
+                if (person[4]) pedestrian_timer_pixel = person;
+                if (text_pixel(px,py,left+9,top+18,1,tens) ||
+                    text_pixel(px,py,left+15,top+18,1,ones))
+                    pedestrian_timer_pixel = {1'b1, YELLOW};
             end
         end
     endfunction
 
     wire [8:0] x = pixel_x[9:1];
     wire [8:0] y = pixel_y[9:1];
-    wire [7:0] ped_n_bcd = ped_counts_bcd[31:24];
-    wire [7:0] ped_e_bcd = ped_counts_bcd[23:16];
-    wire [7:0] ped_s_bcd = ped_counts_bcd[15:8];
-    wire [7:0] ped_w_bcd = ped_counts_bcd[7:0];
     reg signed [11:0] dx, dy, u, v;
     reg [11:0] abs_u, abs_v;
     reg [3:0] ink;
     reg [4:0] overlay;
     reg [23:0] rgb;
 
-    // Background -> road markings -> sprites -> dashboard -> blanking.
+    // Layer order: black -> road -> markings -> cars -> signals -> UI.
+    // Every value is assigned on every path: this is only pixel drawing.
     always @(*) begin
-        dx = $signed({3'b000,x})-CENTER_X;
-        dy = $signed({3'b000,y})-CENTER_Y;
-        u = (dy <<< 1)-dx;
-        v = (dy <<< 1)+dx;
+        // Only the right scene changes scale. x/y below remain unchanged
+        // for the menu and readable timer-card text.
+        dx = $signed({2'b00,pixel_x})-CENTER_X;
+        dy = $signed({2'b00,pixel_y})-CENTER_Y;
+
+        // Two diagonal coordinate tests give the 2:1 isometric roads.
+        // Only additions/shifts/comparisons are needed for the road.
+        u = (dy <<< 1) - dx;
+        v = (dy <<< 1) + dx;
         abs_u = (u < 0) ? -u : u;
         abs_v = (v < 0) ? -v : v;
         ink = BLACK;
         overlay = 5'd0;
 
         if (x > MENU_EDGE+1) begin
-            if (abs_u <= ROAD_HALF+3 || abs_v <= ROAD_HALF+3) ink = WHITE;
-            if (abs_u <= ROAD_HALF || abs_v <= ROAD_HALF) ink = ASPHALT;
+            // Draw the union of the roads so no border crosses the center.
+            if (abs_u <= ROAD_HALF+3 || abs_v <= ROAD_HALF+3)
+                ink = WHITE;
+            if (abs_u <= ROAD_HALF || abs_v <= ROAD_HALF)
+                ink = ASPHALT;
 
-            // Double yellow separates opposing traffic. Dashed white
-            // separates the two lanes travelling in the same direction.
-            if ((abs_u >= 2 && abs_u <= 3 && abs_v >= 88) ||
-                (abs_v >= 2 && abs_v <= 3 && abs_u >= 88))
+            // Four lanes total on each road: two in each direction.
+            // Double yellow lines separate opposing traffic.
+            if ((abs_u >= 1 && abs_u <= 2 && abs_v >= 114) ||
+                (abs_v >= 1 && abs_v <= 2 && abs_u >= 114))
                 ink = YELLOW;
-            if (((abs_u >= 23 && abs_u <= 24 && abs_v >= 88) ||
-                 (abs_v >= 23 && abs_v <= 24 && abs_u >= 88)) && ((x & 15) < 8))
+
+            // White dashed lines split each direction into two lanes.
+            if (((abs_u >= 29 && abs_u <= 31 && abs_v >= 114) ||
+                 (abs_v >= 29 && abs_v <= 31 && abs_u >= 114)) &&
+                ((pixel_x & 15) < 8))
                 ink = WHITE;
 
-            // Six full zebra stripes across each four-lane arm.
-            if ((u >= -44 && u <= 43 && abs_v >= 66 && abs_v <= 82 && ((u+44) & 15) < 8) ||
-                (v >= -44 && v <= 43 && abs_u >= 66 && abs_u <= 82 && ((v+44) & 15) < 8))
+            // Four full-width zebra crossings, outside the junction.
+            if ((abs_u <= 56 && abs_v >= 84 && abs_v <= 100 &&
+                 ((u+56) & 15) < 8) ||
+                (abs_v <= 56 && abs_u >= 84 && abs_u <= 100 &&
+                 ((v+56) & 15) < 8))
                 ink = WHITE;
 
-            // Stop bars cover the incoming lanes only.
-            if ((u >= 4 && u <= 44 && v >= -94 && v <= -90) ||
-                (u >= -44 && u <= -4 && v >= 90 && v <= 94) ||
-                (v >= -44 && v <= -4 && u >= -94 && u <= -90) ||
-                (v >= 4 && v <= 44 && u >= 90 && u <= 94))
+            // Stop bars cover the incoming half of each approach only.
+            if ((u >= 4 && u <= 57 && v >= -110 && v <= -107) ||
+                (u >= -57 && u <= -4 && v >= 107 && v <= 110) ||
+                (v >= -57 && v <= -4 && u >= -110 && u <= -107) ||
+                (v >= 4 && v <= 57 && u >= 107 && u <= 110))
                 ink = WHITE;
 
-            if (lane_arrow_pixel(u,v,2'd0,1'b0) || lane_arrow_pixel(u,v,2'd0,1'b1) ||
-                lane_arrow_pixel(u,v,2'd1,1'b0) || lane_arrow_pixel(u,v,2'd1,1'b1) ||
-                lane_arrow_pixel(u,v,2'd2,1'b0) || lane_arrow_pixel(u,v,2'd2,1'b1) ||
-                lane_arrow_pixel(u,v,2'd3,1'b0) || lane_arrow_pixel(u,v,2'd3,1'b1))
+            // Inner incoming lane: LEFT ONLY.
+            // Outer incoming lane: STRAIGHT OR RIGHT.
+            // NW/N, SE/S, NE/E, and SW/W all follow the same rule.
+            if (lane_arrow_pixel(v+132, u-15, 1'b1) ||
+                lane_arrow_pixel(v+132, u-45, 1'b0) ||
+                lane_arrow_pixel(132-v, -u-15, 1'b1) ||
+                lane_arrow_pixel(132-v, -u-45, 1'b0) ||
+                lane_arrow_pixel(u+132, -v-15, 1'b1) ||
+                lane_arrow_pixel(u+132, -v-45, 1'b0) ||
+                lane_arrow_pixel(132-u, v-15, 1'b1) ||
+                lane_arrow_pixel(132-u, v-45, 1'b0))
                 ink = WHITE;
 
-            // Cars are fixed drawings, placed behind the lane arrows.
-            overlay = car_pixel(x,y,N_CAR_X,N_CAR_Y,2'd0,2'd0);
+            // Static car ground anchors. Change these numbers to place
+            // cars; the sprite contains only the small car, not asphalt.
+            overlay = car_pixel(pixel_x, pixel_y, NW_CAR_X, NW_CAR_Y, 2'd0, 2'd0);
             if (overlay[4]) ink = overlay[3:0];
-            overlay = car_pixel(x,y,E_CAR_X,E_CAR_Y,2'd1,2'd1);
+            overlay = car_pixel(pixel_x, pixel_y, NE_CAR_X, NE_CAR_Y, 2'd1, 2'd1);
             if (overlay[4]) ink = overlay[3:0];
-            overlay = car_pixel(x,y,S_CAR_X,S_CAR_Y,2'd2,2'd0);
+            overlay = car_pixel(pixel_x, pixel_y, SW_CAR_X, SW_CAR_Y, 2'd3, 2'd2);
             if (overlay[4]) ink = overlay[3:0];
-            overlay = car_pixel(x,y,W_CAR_X,W_CAR_Y,2'd3,2'd2);
-            if (overlay[4]) ink = overlay[3:0];
-
-            if (person_pixel(x,y,187,86) || person_pixel(x,y,221,86) ||
-                person_pixel(x,y,187,146) || person_pixel(x,y,221,146))
-                ink = GLASS_LIGHT;
-
-            overlay = signal_pixel(x,y,170,58,light_ns);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = signal_pixel(x,y,233,58,light_ew);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = signal_pixel(x,y,169,174,light_ew);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = signal_pixel(x,y,238,174,light_ns);
+            overlay = car_pixel(pixel_x, pixel_y, SE_CAR_X, SE_CAR_Y, 2'd2, 2'd0);
             if (overlay[4]) ink = overlay[3:0];
 
-            overlay = ped_head_pixel(x,y,146,35,"N",ped_walk[3],ped_n_bcd);
+            // Opposite corners agree: NW/SE green, NE/SW red.
+            overlay = signal_pixel(pixel_x, pixel_y, 360, 184, 1'b1);
             if (overlay[4]) ink = overlay[3:0];
-            overlay = ped_head_pixel(x,y,252,35,"E",ped_walk[2],ped_e_bcd);
+            overlay = signal_pixel(pixel_x, pixel_y, 422, 184, 1'b0);
             if (overlay[4]) ink = overlay[3:0];
-            overlay = ped_head_pixel(x,y,255,204,"S",ped_walk[1],ped_s_bcd);
+            overlay = signal_pixel(pixel_x, pixel_y, 310, 335, 1'b0);
             if (overlay[4]) ink = overlay[3:0];
-            overlay = ped_head_pixel(x,y,137,204,"W",ped_walk[0],ped_w_bcd);
+            overlay = signal_pixel(pixel_x, pixel_y, 470, 335, 1'b1);
             if (overlay[4]) ink = overlay[3:0];
 
-            if (text_pixel(x,y,117,47,1,"N") || text_pixel(x,y,298,47,1,"E") ||
-                text_pixel(x,y,298,199,1,"S") || text_pixel(x,y,109,199,1,"W"))
+            // One standing pedestrian beside each crossing.
+            overlay = pedestrian_pixel(pixel_x, pixel_y, 378, 203, WHITE);
+            if (overlay[4]) ink = overlay[3:0];
+            overlay = pedestrian_pixel(pixel_x, pixel_y, 408, 203, WHITE);
+            if (overlay[4]) ink = overlay[3:0];
+            overlay = pedestrian_pixel(pixel_x, pixel_y, 378, 285, WHITE);
+            if (overlay[4]) ink = overlay[3:0];
+            overlay = pedestrian_pixel(pixel_x, pixel_y, 408, 285, WHITE);
+            if (overlay[4]) ink = overlay[3:0];
+
+            // Example readouts only. This module has no timer clock.
+            overlay = pedestrian_timer_pixel(x,y,133,16,"N","1","2");
+            if (overlay[4]) ink = overlay[3:0];
+            overlay = pedestrian_timer_pixel(x,y,235,16,"E","0","8");
+            if (overlay[4]) ink = overlay[3:0];
+            overlay = pedestrian_timer_pixel(x,y,112,207,"W","1","0");
+            if (overlay[4]) ink = overlay[3:0];
+            overlay = pedestrian_timer_pixel(x,y,250,207,"S","1","6");
+            if (overlay[4]) ink = overlay[3:0];
+
+            // Road labels use the same cardinal directions as the cards.
+            if (text_pixel(x,y,101,67,1,"N") ||
+                text_pixel(x,y,299,65,1,"E") ||
+                text_pixel(x,y,102,191,1,"W") ||
+                text_pixel(x,y,299,184,1,"S"))
                 ink = GRAY;
         end
 
-        // Compact control center. Commands/keys are visual labels only.
-        // The existing switches still feed the road lights and color bars.
+        // LEFT MENU: fixed artwork only. No control behavior is added.
         if (x < MENU_EDGE) begin
-            if (text_pixel(x,y,6,8,7,"CONTROL")) ink = WHITE;
-            if (x >= 75 && x < 84 && y >= 5 && y < 21) begin
-                ink = GRAY;
-                if (x >= 76 && x < 83 && y >= 6 && y < 20) ink = BLACK;
-                if (x >= 78 && x < 81) begin
-                    if (y >= 8 && y < 11) ink = CORAL;
-                    if (y >= 12 && y < 15) ink = YELLOW;
-                    if (y >= 16 && y < 19) ink = GREEN;
+            // Header symbol and title, retained from the original scene.
+            if (x >= 7 && x < 21 && y >= 10 && y < 36) begin
+                ink = WHITE;
+                if (x >= 8 && x < 20 && y >= 11 && y < 35)
+                    ink = BLACK;
+                if (x >= 10 && x < 18) begin
+                    if (y >= 13 && y < 19) ink = CORAL;
+                    if (y >= 21 && y < 26) ink = YELLOW;
+                    if (y >= 28 && y < 33) ink = GREEN;
                 end
             end
 
-            // Primary commands: full-width rows with right-aligned keys.
-            overlay = ui_box_pixel(x,y,5,28,81,14,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,5,45,81,14,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,5,62,81,14,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            if (x >= 6 && x < 8) begin
-                if (y >= 29 && y < 41) ink = GREEN;
-                if (y >= 46 && y < 58) ink = YELLOW;
-                if (y >= 63 && y < 75) ink = CORAL;
-            end
-            if (text_pixel(x,y,12,32,3,"RUN") ||
-                text_pixel(x,y,12,49,5,"PAUSE") ||
-                text_pixel(x,y,12,66,5,"RESET")) ink = WHITE;
-            if (text_pixel(x,y,65,32,3,"[1]")) ink = GREEN;
-            if (text_pixel(x,y,65,49,3,"[2]")) ink = YELLOW;
-            if (text_pixel(x,y,65,66,3,"[3]")) ink = CORAL;
+            if (text_pixel(x,y,27,13,7,"TRAFFIC") ||
+                text_pixel(x,y,27,25,7,"CONTROL"))
+                ink = WHITE;
 
-            if (x >= 5 && x < 86 && (y == 81 || y == 144 || y == 195)) ink = GRAY;
-            if (text_pixel(x,y,6,87,8,"VEHICLES")) ink = GRAY;
+            // Thin separators divide the requested control groups.
+            if (x >= 7 && x < 68 &&
+                (y == 94 || y == 140 || y == 188))
+                ink = GRAY;
 
-            // Directions are intentionally ordered N S E W, as requested.
-            overlay = ui_box_pixel(x,y,5,99,17,17,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,26,99,17,17,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,47,99,17,17,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,68,99,17,17,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            if (text_pixel(x,y,11,103,1,"N") || text_pixel(x,y,32,103,1,"S") ||
-                text_pixel(x,y,53,103,1,"E") || text_pixel(x,y,74,103,1,"W")) ink = WHITE;
-            if (y >= 112 && y < 115) begin
-                if ((x >= 6 && x < 21) || (x >= 27 && x < 42)) ink = light_color(light_ns);
-                if ((x >= 48 && x < 63) || (x >= 69 && x < 84)) ink = light_color(light_ew);
-            end
+            // RUN / PAUSE / RESET rows.
+            if (x >= 7 && x < 68 &&
+                ((y >= 45 && y < 58) ||
+                 (y >= 61 && y < 74) ||
+                 (y >= 77 && y < 90)))
+                ink = ASPHALT;
 
-            // Shared movement selection sits directly below the direction row.
-            overlay = ui_box_pixel(x,y,16,123,17,16,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,37,123,17,16,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,58,123,17,16,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            if (text_pixel(x,y,22,127,1,"L") || text_pixel(x,y,43,127,1,"S") ||
-                text_pixel(x,y,64,127,1,"R")) ink = WHITE;
+            // Dark key badges line up at the right of each row.
+            if (x >= 47 && x < 67 &&
+                ((y >= 47 && y < 56) ||
+                 (y >= 63 && y < 72) ||
+                 (y >= 79 && y < 88)))
+                ink = BLACK;
 
-            if (text_pixel(x,y,5,151,10,"PEDESTRIAN")) ink = WHITE;
-            if (text_pixel(x,y,71,151,3,"[P]")) ink = YELLOW;
-            overlay = ui_box_pixel(x,y,5,164,17,25,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,26,164,17,25,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,47,164,17,25,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,68,164,17,25,GRAY);
-            if (overlay[4]) ink = overlay[3:0];
-            if (text_pixel(x,y,11,168,1,"N")) ink = ped_walk[3] ? GREEN : CORAL;
-            if (text_pixel(x,y,32,168,1,"S")) ink = ped_walk[1] ? GREEN : CORAL;
-            if (text_pixel(x,y,53,168,1,"E")) ink = ped_walk[2] ? GREEN : CORAL;
-            if (text_pixel(x,y,74,168,1,"W")) ink = ped_walk[0] ? GREEN : CORAL;
-            if (count_pixel(x,y,8,179,ped_n_bcd) || count_pixel(x,y,29,179,ped_s_bcd) ||
-                count_pixel(x,y,50,179,ped_e_bcd) || count_pixel(x,y,71,179,ped_w_bcd)) ink = YELLOW;
+            if (text_pixel(x,y,12,48,3,"RUN") ||
+                text_pixel(x,y,12,64,5,"PAUSE") ||
+                text_pixel(x,y,12,80,5,"RESET"))
+                ink = WHITE;
 
-            // The full heading wraps to fit the existing narrow sidebar.
-            if (text_pixel(x,y,18,201,9,"EMERGENCY")) ink = CORAL;
-            if (text_pixel(x,y,21,211,8,"SERVICES")) ink = WHITE;
-            overlay = ui_box_pixel(x,y,5,223,17,15,CORAL);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,26,223,17,15,CORAL);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,47,223,17,15,CORAL);
-            if (overlay[4]) ink = overlay[3:0];
-            overlay = ui_box_pixel(x,y,68,223,17,15,CORAL);
-            if (overlay[4]) ink = overlay[3:0];
-            if (text_pixel(x,y,11,227,1,"A") || text_pixel(x,y,32,227,1,"F") ||
-                text_pixel(x,y,53,227,1,"C") || text_pixel(x,y,74,227,1,"B")) ink = WHITE;
+            if (text_pixel(x,y,49,48,3,"[1]") ||
+                text_pixel(x,y,49,64,3,"[2]") ||
+                text_pixel(x,y,49,80,3,"[3]"))
+                ink = YELLOW;
+
+            // Vehicle directions and pedestrian directions use the same
+            // four-column alignment: N, S, E, W.
+            if (((x >= 7 && x < 20) ||
+                 (x >= 23 && x < 36) ||
+                 (x >= 39 && x < 52) ||
+                 (x >= 55 && x < 68)) &&
+                ((y >= 102 && y < 116) ||
+                 (y >= 166 && y < 180)))
+                ink = ASPHALT;
+
+            // L / S / R subsection, centered under vehicle directions.
+            if (((x >= 11 && x < 28) ||
+                 (x >= 31 && x < 48) ||
+                 (x >= 51 && x < 68)) &&
+                y >= 121 && y < 135)
+                ink = ASPHALT;
+
+            if (text_pixel(x,y,11,105,1,"N") ||
+                text_pixel(x,y,27,105,1,"S") ||
+                text_pixel(x,y,43,105,1,"E") ||
+                text_pixel(x,y,59,105,1,"W") ||
+                text_pixel(x,y,17,124,1,"L") ||
+                text_pixel(x,y,37,124,1,"S") ||
+                text_pixel(x,y,57,124,1,"R"))
+                ink = WHITE;
+
+            // A compact heading fits PEDESTRIAN [P] on one line.
+            if (compact_text_pixel(x,y,9,151,14,"PEDESTRIAN [P]"))
+                ink = MINT;
+
+            if (text_pixel(x,y,11,169,1,"N") ||
+                text_pixel(x,y,27,169,1,"S") ||
+                text_pixel(x,y,43,169,1,"E") ||
+                text_pixel(x,y,59,169,1,"W"))
+                ink = WHITE;
+
+            // Emergency heading uses two lines to keep the menu width.
+            if (text_pixel(x,y,11,197,9,"EMERGENCY") ||
+                text_pixel(x,y,14,207,8,"SERVICES"))
+                ink = CORAL;
+
+            // Emergency selections, in the requested A / F / C / B order.
+            if (((x >= 7 && x < 20) ||
+                 (x >= 23 && x < 36) ||
+                 (x >= 39 && x < 52) ||
+                 (x >= 55 && x < 68)) &&
+                y >= 222 && y < 236)
+                ink = ASPHALT;
+
+            if (text_pixel(x,y,11,225,1,"A") ||
+                text_pixel(x,y,27,225,1,"F") ||
+                text_pixel(x,y,43,225,1,"C") ||
+                text_pixel(x,y,59,225,1,"B"))
+                ink = WHITE;
         end
+
+        // One thin vertical divider; no surrounding dashboard boxes.
         if (x == MENU_EDGE) ink = GRAY;
+
         rgb = palette(ink);
-        if (!visible || pixel_x >= 640 || pixel_y >= 480) rgb = 24'h000000;
+        // Blanking has final priority, including unused coordinate space.
+        if (!visible || pixel_x >= 640 || pixel_y >= 480)
+            rgb = 24'h000000;
     end
-    assign red = rgb[23:16];
+
+    assign red   = rgb[23:16];
     assign green = rgb[15:8];
-    assign blue = rgb[7:0];
+    assign blue  = rgb[7:0];
 endmodule
