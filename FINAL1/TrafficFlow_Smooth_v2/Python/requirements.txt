@@ -1,0 +1,2 @@
+# Runtime: Python standard library only; Quartus Prime required for hardware.
+# Optional reference preview renderer: Pillow and NumPy (sim/render_preview.py).

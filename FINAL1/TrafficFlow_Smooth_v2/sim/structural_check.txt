@@ -1,0 +1,5 @@
+Yosys: hierarchy -check; proc; opt; check -assert; stat
+Vendor primitive treated as black box.
+Found and reported 0 problems.
+No scene latches inferred. Not Quartus fitting/timing or ALM utilization.
+Adaptive interpolation uses one general reciprocal multiplier shared over forty coordinates; other constant address-scaling products are synthesizer arithmetic.

@@ -1,0 +1,4 @@
+Development container, controller only, no USB-Blaster/Quartus I/O:
+60 simulated seconds / 1800 updates (NB left, NB walk, WB walk):
+mean 0.987 ms, p95 3.158 ms, max 6.147 ms per update.
+Not a physical-host throughput or monitor frame-rate guarantee.

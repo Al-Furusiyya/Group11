@@ -1,0 +1,94 @@
+Built 38 Lab4 instructions; RAM words 0x3C0..0x3FF reserved for I/O.
+/workspace/scratch/47b2fcc0489c/TrafficFlow_Smooth_v2/CPU/traffic_io.v:32: warning: @* is sensitive to all 16 words in array 'keys'.
+/workspace/scratch/47b2fcc0489c/TrafficFlow_Smooth_v2/CPU/traffic_io.v:32: warning: @* is sensitive to all 16 words in array 'keys'.
+/workspace/scratch/47b2fcc0489c/TrafficFlow_Smooth_v2/CPU/traffic_io.v:32: warning: @* is sensitive to all 16 words in array 'keys'.
+test_center_braking_has_no_velocity_jump_and_holds_wheels_straight (test_flow.Flow.test_center_braking_has_no_velocity_jump_and_holds_wheels_straight) ... ok
+test_emergency_freezes_and_resumes_walker_progress (test_flow.Flow.test_emergency_freezes_and_resumes_walker_progress) ... ok
+test_empty_green_left_enters_on_first_step (test_flow.Flow.test_empty_green_left_enters_on_first_step) ... ok
+test_green_opposing_streams_never_stop_inside (test_flow.Flow.test_green_opposing_streams_never_stop_inside) ... ok
+test_late_request_with_all_five_routes_locked_is_not_lost (test_flow.Flow.test_late_request_with_all_five_routes_locked_is_not_lost) ... ok
+test_left_queue_does_not_block_outer_lane (test_flow.Flow.test_left_queue_does_not_block_outer_lane) ... ok
+test_live_sprite_slots_do_not_shift_when_other_cars_exit (test_flow.Flow.test_live_sprite_slots_do_not_shift_when_other_cars_exit) ... ok
+test_new_acceleration_and_braking_are_bounded_on_approach (test_flow.Flow.test_new_acceleration_and_braking_are_bounded_on_approach) ... ok
+test_protected_center_wait_excludes_target_from_clearance (test_flow.Flow.test_protected_center_wait_excludes_target_from_clearance) ... ok
+test_protected_fallback_yellow_clearance_and_no_starvation (test_flow.Flow.test_protected_fallback_yellow_clearance_and_no_starvation) ... ok
+test_seeded_busy_requests_all_vehicle_pairs_and_interruptions (test_flow.Flow.test_seeded_busy_requests_all_vehicle_pairs_and_interruptions) ... ok
+test_slow_link_partition_preserves_deterministic_motion (test_flow.Flow.test_slow_link_partition_preserves_deterministic_motion) ... ok
+test_yield_rechecks_every_tick_then_goes_when_gap_opens (test_flow.Flow.test_yield_rechecks_every_tick_then_goes_when_gap_opens) ... ok
+test_firmware_reserved_io_space_and_size (test_project.ProjectTests.test_firmware_reserved_io_space_and_size) ... ok
+test_pin_assignments_unique (test_project.ProjectTests.test_pin_assignments_unique) ... ok
+test_quartus_source_paths_exist (test_project.ProjectTests.test_quartus_source_paths_exist) ... ok
+test_reference_states_are_valid_width (test_project.ProjectTests.test_reference_states_are_valid_width) ... ok
+test_scene_ports_match_top_and_capture_bench (test_project.ProjectTests.test_scene_ports_match_top_and_capture_bench) ... ok
+test_device_discovery_skips_hps_for_runtime (test_python.JtagTests.test_device_discovery_skips_hps_for_runtime) ... ok
+test_host_decodes_actual_rtl_replies (test_python.JtagTests.test_host_decodes_actual_rtl_replies) ... ok
+test_real_tcl_server_and_python_subprocess (test_python.JtagTests.test_real_tcl_server_and_python_subprocess) ... ok
+test_reply_crc_sequence_and_flags (test_python.JtagTests.test_reply_crc_sequence_and_flags) ... ok
+test_reset_interrupting_idle_scan_recovers (test_python.JtagTests.test_reset_interrupting_idle_scan_recovers) ... ok
+test_tcl_reset_notification_and_idle_recovery (test_python.JtagTests.test_tcl_reset_notification_and_idle_recovery) ... ok
+test_layout_and_crc (test_python.Tests.test_layout_and_crc) ... ok
+test_ranges (test_python.Tests.test_ranges) ... ok
+test_bad_last_car_is_rejected_before_first_bank (test_queues.Queues.test_bad_last_car_is_rejected_before_first_bank) ... ok
+test_busy_default_replenishes_and_queues_keep_spacing (test_queues.Queues.test_busy_default_replenishes_and_queues_keep_spacing) ... ok
+test_five_cars_per_active_direction_and_only_leader_chooses (test_queues.Queues.test_five_cars_per_active_direction_and_only_leader_chooses) ... ok
+test_only_target_changes_during_choice (test_queues.Queues.test_only_target_changes_during_choice) ... ok
+test_reset_during_bank_restarts_next_snapshot_at_zero (test_queues.Queues.test_reset_during_bank_restarts_next_snapshot_at_zero) ... ok
+test_twenty_cars_survive_banking_crc_sequence_wrap_and_keys (test_queues.Queues.test_twenty_cars_survive_banking_crc_sequence_wrap_and_keys) ... ok
+test_embedded_jtag_clock_is_reused (test_sdc.SdcTests.test_embedded_jtag_clock_is_reused) ... ok
+test_fallback_clock_matches_vendor_30mhz (test_sdc.SdcTests.test_fallback_clock_matches_vendor_30mhz) ... ok
+test_missing_divider_is_an_explicit_error (test_sdc.SdcTests.test_missing_divider_is_an_explicit_error) ... ok
+test_missing_tck_is_an_explicit_error (test_sdc.SdcTests.test_missing_tck_is_an_explicit_error) ... ok
+test_all_direction_turn_pairs_return_to_default (test_traffic.TrafficTests.test_all_direction_turn_pairs_return_to_default) ... ok
+test_default_only_ew_and_alternating_right_turns (test_traffic.TrafficTests.test_default_only_ew_and_alternating_right_turns) ... ok
+test_emergency_all_four_and_release (test_traffic.TrafficTests.test_emergency_all_four_and_release) ... ok
+test_emergency_during_release_clearance_preserves_request (test_traffic.TrafficTests.test_emergency_during_release_clearance_preserves_request) ... ok
+test_emergency_resumes_left_request (test_traffic.TrafficTests.test_emergency_resumes_left_request) ... ok
+test_host_recognizes_board_reset (test_traffic.TrafficTests.test_host_recognizes_board_reset) ... ok
+test_idle_and_reset_are_empty (test_traffic.TrafficTests.test_idle_and_reset_are_empty) ... ok
+test_invalid_time_rejected (test_traffic.TrafficTests.test_invalid_time_rejected) ... ok
+test_late_valid_left_choice_does_not_teleport_car (test_traffic.TrafficTests.test_late_valid_left_choice_does_not_teleport_car) ... ok
+test_latest_queued_request_is_served (test_traffic.TrafficTests.test_latest_queued_request_is_served) ... ok
+test_left_yields_to_stream_and_uses_gap_without_fixed_wait (test_traffic.TrafficTests.test_left_yields_to_stream_and_uses_gap_without_fixed_wait) ... ok
+test_no_choice_defaults_straight (test_traffic.TrafficTests.test_no_choice_defaults_straight) ... ok
+test_notice_boundary_locks_route (test_traffic.TrafficTests.test_notice_boundary_locks_route) ... ok
+test_paths_start_at_opposite_compass_edge (test_traffic.TrafficTests.test_paths_start_at_opposite_compass_edge) ... ok
+test_pause_freezes_motion_timers_and_resume (test_traffic.TrafficTests.test_pause_freezes_motion_timers_and_resume) ... ok
+test_pedestrians_in_all_travel_directions (test_traffic.TrafficTests.test_pedestrians_in_all_travel_directions) ... ok
+test_randomized_commands_safety_and_packet_ranges (test_traffic.TrafficTests.test_randomized_commands_safety_and_packet_ranges) ... ok
+test_reset_and_metadata_wire_layout (test_traffic.TrafficTests.test_reset_and_metadata_wire_layout) ... ok
+test_running_again_does_not_restart (test_traffic.TrafficTests.test_running_again_does_not_restart) ... ok
+test_short_choice_window_follows_yellow_without_slow_mode (test_traffic.TrafficTests.test_short_choice_window_follows_yellow_without_slow_mode) ... ok
+test_south_key_and_straight_label_use_distinct_codes (test_traffic.TrafficTests.test_south_key_and_straight_label_use_distinct_codes) ... ok
+test_step_partition_invariance (test_traffic.TrafficTests.test_step_partition_invariance) ... ok
+test_all_walk_directions_have_moving_compatible_traffic (test_walk_flow.WalkFlow.test_all_walk_directions_have_moving_compatible_traffic) ... ok
+test_crosswalk_conflict_matrix_on_parallel_axis (test_walk_flow.WalkFlow.test_crosswalk_conflict_matrix_on_parallel_axis) ... ok
+test_person_waits_for_preexisting_conflicting_turn (test_walk_flow.WalkFlow.test_person_waits_for_preexisting_conflicting_turn) ... ok
+
+----------------------------------------------------------------------
+Ran 61 tests in 89.260s
+
+OK
+PASS: transport padding, short scan, busy, CRC, range and KEY0 handshake
+sim/tb_jtag_transport.v:82: $finish called at 338388000 (1ps)
+PASS: JTAG scans -> actual Lab4 CPU -> five banks -> atomic twenty-car VGA commit
+PASS: stall, CRC/range/order, restart, PS2 forwarding and KEY0 reset
+sim/tb_system.v:165: $finish called at 4450394000 (1ps)
+PASS: adaptive Q8 interpolation, twenty slots, negative/variable cadence, heading, rebase, stall, pause/reset/wrap
+sim/tb_sprite_smoother.v:68: $finish called at 36421000 (1ps)
+PASS: registered RGB/sync/blank match and remain stable at DAC sampling edge
+sim/tb_vga_output.v:23: $finish called at 34011000 (1ps)
+PASS: all pedestrian directions/endpoints, WB far crosswalk, arrows above lights
+sim/tb_scene_checks.v:38: $finish called at 14000 (1ps)
+PASS: uploaded regression tb_CPU_Part1
+PASS: uploaded regression tb_CPU_Branch
+PASS: uploaded regression tb_CPUControl
+PASS: uploaded regression tb_InstructionDecoder
+PASS: uploaded regression tb_BranchCondition
+PASS: uploaded regression tb_ProgramCounter
+PASS: uploaded regression tb_PS2Keyboard
+
+ACTUAL SCENE CAPTURE
+PASS: six VGA frames captured without unknown pixels; blanking correct
+TrafficFlow_Smooth_v2/sim/tb_vga_capture.v:48: $finish called at 1843201000 (1ps)
+
+Strengthened counter-wrap bench was also rerun after the main suite and passed, including a visible new car across FFFF -> 0000.

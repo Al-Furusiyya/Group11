@@ -1,0 +1,1 @@
+Six full frames captured from vga_scene.v by sim/tb_vga_capture.v using the supplied vga_states.hex/vga_cars.hex. These are executed RTL pixel captures, not FPGA photographs. RGB/sync output registers and interpolation are verified in their separate benches.

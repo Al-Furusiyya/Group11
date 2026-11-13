@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.vvp
+*.ppm
+*.vcd
+sim/rtl_verified.marker
+sim/replies.hex
+db/
+incremental_db/
+output_files/
+*.qws
