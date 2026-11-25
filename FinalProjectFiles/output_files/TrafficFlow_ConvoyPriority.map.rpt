@@ -1,0 +1,1136 @@
+Analysis & Synthesis report for TrafficFlow_ConvoyPriority
+Tue Nov 24 18:09:10 2026
+Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Analysis & Synthesis RAM Summary
+  9. Analysis & Synthesis DSP Block Usage Summary
+ 10. Registers Removed During Synthesis
+ 11. General Register Statistics
+ 12. Inverted Register Statistics
+ 13. Registers Added for RAM Pass-Through Logic
+ 14. Registers Packed Into Inferred Megafunctions
+ 15. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 16. Source assignments for traffic_io:peripherals|altsyncram:keys_rtl_0|altsyncram_fvj1:auto_generated
+ 17. Source assignments for CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated
+ 18. Parameter Settings for User Entity Instance: PS2Keyboard:keyboard
+ 19. Parameter Settings for User Entity Instance: PS2Keyboard:keyboard|PS2Receiver:receiver
+ 20. Parameter Settings for User Entity Instance: PS2Keyboard:keyboard|PS2KeyDecoder:decoder
+ 21. Parameter Settings for User Entity Instance: CPU_Part1:cpu
+ 22. Parameter Settings for User Entity Instance: CPU_Part1:cpu|ProgramCounter:program_counter
+ 23. Parameter Settings for User Entity Instance: CPU_Part1:cpu|bram:memory
+ 24. Parameter Settings for User Entity Instance: CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|ALU:alu_unit
+ 25. Parameter Settings for Inferred Entity Instance: traffic_io:peripherals|altsyncram:keys_rtl_0
+ 26. Parameter Settings for Inferred Entity Instance: CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0
+ 27. altsyncram Parameter Settings by Entity Instance
+ 28. Port Connectivity Checks: "traffic_io:peripherals"
+ 29. Port Connectivity Checks: "CPU_Part1:cpu|ALU_RegFile_Datapath:datapath"
+ 30. Port Connectivity Checks: "CPU_Part1:cpu|CPUControl:control"
+ 31. Port Connectivity Checks: "CPU_Part1:cpu|bram:memory"
+ 32. Port Connectivity Checks: "CPU_Part1:cpu"
+ 33. Port Connectivity Checks: "PS2Keyboard:keyboard"
+ 34. Post-Synthesis Netlist Statistics for Top Partition
+ 35. Elapsed Time Per Partition
+ 36. Analysis & Synthesis Messages
+ 37. Analysis & Synthesis Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
+
+
+
++-----------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                      ;
++---------------------------------+-------------------------------------------------+
+; Analysis & Synthesis Status     ; Successful - Tue Nov 24 18:09:10 2026           ;
+; Quartus Prime Version           ; 25.1std.0 Build 1129 10/21/2025 SC Lite Edition ;
+; Revision Name                   ; TrafficFlow_ConvoyPriority                      ;
+; Top-level Entity Name           ; demo_VGA_CPU                                    ;
+; Family                          ; Cyclone V                                       ;
+; Logic utilization (in ALMs)     ; N/A                                             ;
+; Total registers                 ; 5466                                            ;
+; Total pins                      ; 46                                              ;
+; Total virtual pins              ; 0                                               ;
+; Total block memory bits         ; 524,368                                         ;
+; Total DSP Blocks                ; 3                                               ;
+; Total HSSI RX PCSs              ; 0                                               ;
+; Total HSSI PMA RX Deserializers ; 0                                               ;
+; Total HSSI TX PCSs              ; 0                                               ;
+; Total HSSI PMA TX Serializers   ; 0                                               ;
+; Total PLLs                      ; 0                                               ;
+; Total DLLs                      ; 0                                               ;
++---------------------------------+-------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                                     ;
++---------------------------------------------------------------------------------+--------------------+----------------------------+
+; Option                                                                          ; Setting            ; Default Value              ;
++---------------------------------------------------------------------------------+--------------------+----------------------------+
+; Device                                                                          ; 5CSEMA5F31C6       ;                            ;
+; Top-level entity name                                                           ; demo_VGA_CPU       ; TrafficFlow_ConvoyPriority ;
+; Family name                                                                     ; Cyclone V          ; Cyclone V                  ;
+; Maximum processors allowed for parallel compilation                             ; 4                  ;                            ;
+; Use smart compilation                                                           ; Off                ; Off                        ;
+; Enable parallel Assembler and Timing Analyzer during compilation                ; On                 ; On                         ;
+; Enable compact report table                                                     ; Off                ; Off                        ;
+; Restructure Multiplexers                                                        ; Auto               ; Auto                       ;
+; MLAB Add Timing Constraints For Mixed-Port Feed-Through Mode Setting Don't Care ; Off                ; Off                        ;
+; Create Debugging Nodes for IP Cores                                             ; Off                ; Off                        ;
+; Preserve fewer node names                                                       ; On                 ; On                         ;
+; Intel FPGA IP Evaluation Mode                                                   ; Enable             ; Enable                     ;
+; Verilog Version                                                                 ; Verilog_2001       ; Verilog_2001               ;
+; VHDL Version                                                                    ; VHDL_1993          ; VHDL_1993                  ;
+; State Machine Processing                                                        ; Auto               ; Auto                       ;
+; Safe State Machine                                                              ; Off                ; Off                        ;
+; Extract Verilog State Machines                                                  ; On                 ; On                         ;
+; Extract VHDL State Machines                                                     ; On                 ; On                         ;
+; Ignore Verilog initial constructs                                               ; Off                ; Off                        ;
+; Iteration limit for constant Verilog loops                                      ; 5000               ; 5000                       ;
+; Iteration limit for non-constant Verilog loops                                  ; 250                ; 250                        ;
+; Add Pass-Through Logic to Inferred RAMs                                         ; On                 ; On                         ;
+; Infer RAMs from Raw Logic                                                       ; On                 ; On                         ;
+; Parallel Synthesis                                                              ; On                 ; On                         ;
+; DSP Block Balancing                                                             ; Auto               ; Auto                       ;
+; NOT Gate Push-Back                                                              ; On                 ; On                         ;
+; Power-Up Don't Care                                                             ; On                 ; On                         ;
+; Remove Redundant Logic Cells                                                    ; Off                ; Off                        ;
+; Remove Duplicate Registers                                                      ; On                 ; On                         ;
+; Ignore CARRY Buffers                                                            ; Off                ; Off                        ;
+; Ignore CASCADE Buffers                                                          ; Off                ; Off                        ;
+; Ignore GLOBAL Buffers                                                           ; Off                ; Off                        ;
+; Ignore ROW GLOBAL Buffers                                                       ; Off                ; Off                        ;
+; Ignore LCELL Buffers                                                            ; Off                ; Off                        ;
+; Ignore SOFT Buffers                                                             ; On                 ; On                         ;
+; Limit AHDL Integers to 32 Bits                                                  ; Off                ; Off                        ;
+; Optimization Technique                                                          ; Balanced           ; Balanced                   ;
+; Carry Chain Length                                                              ; 70                 ; 70                         ;
+; Auto Carry Chains                                                               ; On                 ; On                         ;
+; Auto Open-Drain Pins                                                            ; On                 ; On                         ;
+; Perform WYSIWYG Primitive Resynthesis                                           ; Off                ; Off                        ;
+; Auto ROM Replacement                                                            ; On                 ; On                         ;
+; Auto RAM Replacement                                                            ; On                 ; On                         ;
+; Auto DSP Block Replacement                                                      ; On                 ; On                         ;
+; Auto Shift Register Replacement                                                 ; Auto               ; Auto                       ;
+; Allow Shift Register Merging across Hierarchies                                 ; Auto               ; Auto                       ;
+; Auto Clock Enable Replacement                                                   ; On                 ; On                         ;
+; Strict RAM Replacement                                                          ; Off                ; Off                        ;
+; Allow Synchronous Control Signals                                               ; On                 ; On                         ;
+; Force Use of Synchronous Clear Signals                                          ; Off                ; Off                        ;
+; Auto Resource Sharing                                                           ; Off                ; Off                        ;
+; Allow Any RAM Size For Recognition                                              ; Off                ; Off                        ;
+; Allow Any ROM Size For Recognition                                              ; Off                ; Off                        ;
+; Allow Any Shift Register Size For Recognition                                   ; Off                ; Off                        ;
+; Use LogicLock Constraints during Resource Balancing                             ; On                 ; On                         ;
+; Ignore translate_off and synthesis_off directives                               ; Off                ; Off                        ;
+; Timing-Driven Synthesis                                                         ; On                 ; On                         ;
+; Report Parameter Settings                                                       ; On                 ; On                         ;
+; Report Source Assignments                                                       ; On                 ; On                         ;
+; Report Connectivity Checks                                                      ; On                 ; On                         ;
+; Ignore Maximum Fan-Out Assignments                                              ; Off                ; Off                        ;
+; Synchronization Register Chain Length                                           ; 3                  ; 3                          ;
+; Power Optimization During Synthesis                                             ; Normal compilation ; Normal compilation         ;
+; HDL message level                                                               ; Level2             ; Level2                     ;
+; Suppress Register Optimization Related Messages                                 ; Off                ; Off                        ;
+; Number of Removed Registers Reported in Synthesis Report                        ; 5000               ; 5000                       ;
+; Number of Swept Nodes Reported in Synthesis Report                              ; 5000               ; 5000                       ;
+; Number of Inverted Registers Reported in Synthesis Report                       ; 100                ; 100                        ;
+; Clock MUX Protection                                                            ; On                 ; On                         ;
+; Auto Gated Clock Conversion                                                     ; Off                ; Off                        ;
+; Block Design Naming                                                             ; Auto               ; Auto                       ;
+; SDC constraint protection                                                       ; Off                ; Off                        ;
+; Synthesis Effort                                                                ; Auto               ; Auto                       ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal                    ; On                 ; On                         ;
+; Pre-Mapping Resynthesis Optimization                                            ; Off                ; Off                        ;
+; Analysis & Synthesis Message Level                                              ; Medium             ; Medium                     ;
+; Disable Register Merging Across Hierarchies                                     ; Auto               ; Auto                       ;
+; Resource Aware Inference For Block RAM                                          ; On                 ; On                         ;
+; Automatic Parallel Synthesis                                                    ; On                 ; On                         ;
+; Partial Reconfiguration Bitstream ID                                            ; Off                ; Off                        ;
++---------------------------------------------------------------------------------+--------------------+----------------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 16          ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.32        ;
+; Maximum used               ; 4           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processor 2            ;  10.5%      ;
+;     Processor 3            ;  10.5%      ;
+;     Processor 4            ;  10.5%      ;
++----------------------------+-------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                                                                                                         ;
++----------------------------------------------------------+-----------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path                         ; Used in Netlist ; File Type                                             ; File Name with Absolute Path                                                                                                    ; Library ;
++----------------------------------------------------------+-----------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+---------+
+; demo_VGA_CPU.v                                           ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v                                           ;         ;
+; vga_scene.v                                              ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v                                              ;         ;
+; vga_timing.v                                             ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_timing.v                                             ;         ;
+; sprite_smoother.v                                        ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/sprite_smoother.v                                        ;         ;
+; PS2Keyboard.v                                            ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2Keyboard.v                                            ;         ;
+; PS2Receiver.v                                            ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2Receiver.v                                            ;         ;
+; PS2KeyDecoder.v                                          ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2KeyDecoder.v                                          ;         ;
+; KeyboardCommands.v                                       ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/KeyboardCommands.v                                       ;         ;
+; CPU/ProgramCounter.v                                     ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ProgramCounter.v                                     ;         ;
+; CPU/InstructionDecoder.v                                 ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/InstructionDecoder.v                                 ;         ;
+; CPU/CPU_Part1.v                                          ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v                                          ;         ;
+; CPU/RegisterFile.v                                       ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/RegisterFile.v                                       ;         ;
+; CPU/CPUControl.v                                         ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPUControl.v                                         ;         ;
+; CPU/ALU.v                                                ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU.v                                                ;         ;
+; CPU/bram.v                                               ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/bram.v                                               ;         ;
+; CPU/InstructionRegister.v                                ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/InstructionRegister.v                                ;         ;
+; CPU/traffic_io.v                                         ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/traffic_io.v                                         ;         ;
+; CPU/ALU_RegFile_Datapath.v                               ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU_RegFile_Datapath.v                               ;         ;
+; CPU/FlagRegister.v                                       ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/FlagRegister.v                                       ;         ;
+; CPU/BranchCondition.v                                    ; yes             ; User Verilog HDL File                                 ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/BranchCondition.v                                    ;         ;
+; art/service_art.vh                                       ; yes             ; Auto-Found Unspecified File                           ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/art/service_art.vh                                       ;         ;
+; altsyncram.tdf                                           ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/altsyncram.tdf                                                           ;         ;
+; stratix_ram_block.inc                                    ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/stratix_ram_block.inc                                                    ;         ;
+; lpm_mux.inc                                              ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/lpm_mux.inc                                                              ;         ;
+; lpm_decode.inc                                           ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/lpm_decode.inc                                                           ;         ;
+; aglobal251.inc                                           ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/aglobal251.inc                                                           ;         ;
+; a_rdenreg.inc                                            ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/a_rdenreg.inc                                                            ;         ;
+; altrom.inc                                               ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/altrom.inc                                                               ;         ;
+; altram.inc                                               ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/altram.inc                                                               ;         ;
+; altdpram.inc                                             ; yes             ; Megafunction                                          ; c:/altera_lite/25.1std/quartus/libraries/megafunctions/altdpram.inc                                                             ;         ;
+; db/altsyncram_fvj1.tdf                                   ; yes             ; Auto-Generated Megafunction                           ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/altsyncram_fvj1.tdf                                   ;         ;
+; db/altsyncram_4e72.tdf                                   ; yes             ; Auto-Generated Megafunction                           ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/altsyncram_4e72.tdf                                   ;         ;
+; db/TrafficFlow_ConvoyPriority.ram0_bram_cbd1105c.hdl.mif ; yes             ; Auto-Generated Auto-Found Memory Initialization File  ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/TrafficFlow_ConvoyPriority.ram0_bram_cbd1105c.hdl.mif ;         ;
+; db/decode_8la.tdf                                        ; yes             ; Auto-Generated Megafunction                           ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/decode_8la.tdf                                        ;         ;
+; db/mux_7hb.tdf                                           ; yes             ; Auto-Generated Megafunction                           ; C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/mux_7hb.tdf                                           ;         ;
++----------------------------------------------------------+-----------------+-------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------+---------+
+
+
++--------------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary                  ;
++---------------------------------------------+----------------+
+; Resource                                    ; Usage          ;
++---------------------------------------------+----------------+
+; Estimate of Logic utilization (ALMs needed) ; 21877          ;
+;                                             ;                ;
+; Combinational ALUT usage for logic          ; 30606          ;
+;     -- 7 input functions                    ; 1711           ;
+;     -- 6 input functions                    ; 11109          ;
+;     -- 5 input functions                    ; 5701           ;
+;     -- 4 input functions                    ; 4086           ;
+;     -- <=3 input functions                  ; 7999           ;
+;                                             ;                ;
+; Dedicated logic registers                   ; 5466           ;
+;                                             ;                ;
+; I/O pins                                    ; 46             ;
+; Total MLAB memory bits                      ; 0              ;
+; Total block memory bits                     ; 524368         ;
+;                                             ;                ;
+; Total DSP Blocks                            ; 3              ;
+;                                             ;                ;
+; Maximum fan-out node                        ; CLOCK_50~input ;
+; Maximum fan-out                             ; 5535           ;
+; Total fan-out                               ; 164602         ;
+; Average fan-out                             ; 4.54           ;
++---------------------------------------------+----------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                                                                                                                              ;
++--------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+----------------------------------------------------------------------------------------------------------------+----------------------+--------------+
+; Compilation Hierarchy Node                       ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                            ; Entity Name          ; Library Name ;
++--------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+----------------------------------------------------------------------------------------------------------------+----------------------+--------------+
+; |demo_VGA_CPU                                    ; 30606 (12)          ; 5466 (27)                 ; 524368            ; 3          ; 46   ; 0            ; |demo_VGA_CPU                                                                                                  ; demo_VGA_CPU         ; work         ;
+;    |CPU_Part1:cpu|                               ; 651 (25)            ; 315 (16)                  ; 524288            ; 1          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu                                                                                    ; CPU_Part1            ; work         ;
+;       |ALU_RegFile_Datapath:datapath|            ; 549 (169)           ; 261 (0)                   ; 0                 ; 1          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath                                                      ; ALU_RegFile_Datapath ; work         ;
+;          |ALU:alu_unit|                          ; 194 (194)           ; 0 (0)                     ; 0                 ; 1          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|ALU:alu_unit                                         ; ALU                  ; work         ;
+;          |FlagRegister:flag_register|            ; 0 (0)               ; 5 (5)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|FlagRegister:flag_register                           ; FlagRegister         ; work         ;
+;          |RegisterFile:register_file|            ; 186 (186)           ; 256 (256)                 ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|RegisterFile:register_file                           ; RegisterFile         ; work         ;
+;       |BranchCondition:branch_condition_checker| ; 5 (5)               ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|BranchCondition:branch_condition_checker                                           ; BranchCondition      ; work         ;
+;       |CPUControl:control|                       ; 9 (9)               ; 3 (3)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|CPUControl:control                                                                 ; CPUControl           ; work         ;
+;       |InstructionDecoder:instruction_decoder|   ; 25 (25)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|InstructionDecoder:instruction_decoder                                             ; InstructionDecoder   ; work         ;
+;       |InstructionRegister:instruction_register| ; 0 (0)               ; 16 (16)                   ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|InstructionRegister:instruction_register                                           ; InstructionRegister  ; work         ;
+;       |ProgramCounter:program_counter|           ; 2 (2)               ; 15 (15)                   ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|ProgramCounter:program_counter                                                     ; ProgramCounter       ; work         ;
+;       |bram:memory|                              ; 36 (0)              ; 4 (0)                     ; 524288            ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|bram:memory                                                                        ; bram                 ; work         ;
+;          |altsyncram:ram_rtl_0|                  ; 36 (0)              ; 4 (0)                     ; 524288            ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0                                                   ; altsyncram           ; work         ;
+;             |altsyncram_4e72:auto_generated|     ; 36 (0)              ; 4 (4)                     ; 524288            ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated                    ; altsyncram_4e72      ; work         ;
+;                |decode_8la:decode3|              ; 4 (4)               ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated|decode_8la:decode3 ; decode_8la           ; work         ;
+;                |mux_7hb:mux4|                    ; 16 (16)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated|mux_7hb:mux4       ; mux_7hb              ; work         ;
+;                |mux_7hb:mux5|                    ; 16 (16)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated|mux_7hb:mux5       ; mux_7hb              ; work         ;
+;    |KeyboardCommands:keys|                       ; 19 (19)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|KeyboardCommands:keys                                                                            ; KeyboardCommands     ; work         ;
+;    |PS2Keyboard:keyboard|                        ; 569 (0)             ; 341 (0)                   ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|PS2Keyboard:keyboard                                                                             ; PS2Keyboard          ; work         ;
+;       |PS2KeyDecoder:decoder|                    ; 514 (514)           ; 285 (285)                 ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|PS2Keyboard:keyboard|PS2KeyDecoder:decoder                                                       ; PS2KeyDecoder        ; work         ;
+;       |PS2Receiver:receiver|                     ; 55 (55)             ; 56 (56)                   ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|PS2Keyboard:keyboard|PS2Receiver:receiver                                                        ; PS2Receiver          ; work         ;
+;    |sprite_smoother:smooth_sprites|              ; 14208 (14208)       ; 2586 (2586)               ; 0                 ; 1          ; 0    ; 0            ; |demo_VGA_CPU|sprite_smoother:smooth_sprites                                                                   ; sprite_smoother      ; work         ;
+;    |traffic_io:peripherals|                      ; 712 (712)           ; 2176 (2176)               ; 80                ; 0          ; 0    ; 0            ; |demo_VGA_CPU|traffic_io:peripherals                                                                           ; traffic_io           ; work         ;
+;       |altsyncram:keys_rtl_0|                    ; 0 (0)               ; 0 (0)                     ; 80                ; 0          ; 0    ; 0            ; |demo_VGA_CPU|traffic_io:peripherals|altsyncram:keys_rtl_0                                                     ; altsyncram           ; work         ;
+;          |altsyncram_fvj1:auto_generated|        ; 0 (0)               ; 0 (0)                     ; 80                ; 0          ; 0    ; 0            ; |demo_VGA_CPU|traffic_io:peripherals|altsyncram:keys_rtl_0|altsyncram_fvj1:auto_generated                      ; altsyncram_fvj1      ; work         ;
+;    |vga_scene:scene|                             ; 14405 (14405)       ; 0 (0)                     ; 0                 ; 1          ; 0    ; 0            ; |demo_VGA_CPU|vga_scene:scene                                                                                  ; vga_scene            ; work         ;
+;    |vga_timing:timing|                           ; 30 (30)             ; 21 (21)                   ; 0                 ; 0          ; 0    ; 0            ; |demo_VGA_CPU|vga_timing:timing                                                                                ; vga_timing           ; work         ;
++--------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+----------------------------------------------------------------------------------------------------------------+----------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis RAM Summary                                                                                                                                                                                                                   ;
++------------------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+--------+----------------------------------------------------------+
+; Name                                                                                     ; Type ; Mode             ; Port A Depth ; Port A Width ; Port B Depth ; Port B Width ; Size   ; MIF                                                      ;
++------------------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+--------+----------------------------------------------------------+
+; CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated|ALTSYNCRAM ; AUTO ; True Dual Port   ; 32768        ; 16           ; 32768        ; 16           ; 524288 ; db/TrafficFlow_ConvoyPriority.ram0_bram_cbd1105c.hdl.mif ;
+; traffic_io:peripherals|altsyncram:keys_rtl_0|altsyncram_fvj1:auto_generated|ALTSYNCRAM   ; AUTO ; Simple Dual Port ; 16           ; 5            ; 16           ; 5            ; 80     ; None                                                     ;
++------------------------------------------------------------------------------------------+------+------------------+--------------+--------------+--------------+--------------+--------+----------------------------------------------------------+
+
+
++-------------------------------------------------+
+; Analysis & Synthesis DSP Block Usage Summary    ;
++-----------------------------------+-------------+
+; Statistic                         ; Number Used ;
++-----------------------------------+-------------+
+; Independent 9x9                   ; 1           ;
+; Two Independent 18x18             ; 2           ;
+; Total number of DSP blocks        ; 3           ;
+;                                   ;             ;
+; Fixed Point Unsigned Multiplier   ; 2           ;
+; Fixed Point Mixed Sign Multiplier ; 1           ;
++-----------------------------------+-------------+
+
+
++---------------------------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                                      ;
++----------------------------------------------------------------+----------------------------------------+
+; Register name                                                  ; Reason for Removal                     ;
++----------------------------------------------------------------+----------------------------------------+
+; output_b[0,1]                                                  ; Stuck at GND due to stuck port data_in ;
+; traffic_io:peripherals|display_state[224]                      ; Lost fanout                            ;
+; PS2Keyboard:keyboard|PS2KeyDecoder:decoder|key_down[250,254]   ; Stuck at GND due to stuck port data_in ;
+; PS2Keyboard:keyboard|PS2KeyDecoder:decoder|pause_bytes_left[3] ; Stuck at GND due to stuck port data_in ;
+; Total Number of Removed Registers = 6                          ;                                        ;
++----------------------------------------------------------------+----------------------------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 5466  ;
+; Number of registers using Synchronous Clear  ; 338   ;
+; Number of registers using Synchronous Load   ; 15    ;
+; Number of registers using Asynchronous Clear ; 5447  ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 3812  ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++---------------------------------------------------------------------+
+; Inverted Register Statistics                                        ;
++-----------------------------------------------------------+---------+
+; Inverted Register                                         ; Fan out ;
++-----------------------------------------------------------+---------+
+; output_hs                                                 ; 1       ;
+; output_vs                                                 ; 1       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|filtered_clock  ; 3       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|previous_clock  ; 1       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|data_sync[2]    ; 11      ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[2] ; 2       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[1] ; 2       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[0] ; 2       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[7] ; 2       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[6] ; 3       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[5] ; 3       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[4] ; 3       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_filter[3] ; 3       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|data_sync[1]    ; 1       ;
+; sprite_smoother:smooth_sprites|slot_snap                  ; 2       ;
+; sprite_smoother:smooth_sprites|duration[1]                ; 13      ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_sync[2]   ; 1       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|data_sync[0]    ; 1       ;
+; sprite_smoother:smooth_sprites|age[1]                     ; 10      ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_sync[1]   ; 1       ;
+; PS2Keyboard:keyboard|PS2Receiver:receiver|clock_sync[0]   ; 1       ;
+; Total number of inverted registers = 21                   ;         ;
++-----------------------------------------------------------+---------+
+
+
++----------------------------------------------------------------------------------+
+; Registers Added for RAM Pass-Through Logic                                       ;
++----------------------------------------------+-----------------------------------+
+; Register Name                                ; RAM Name                          ;
++----------------------------------------------+-----------------------------------+
+; traffic_io:peripherals|keys_rtl_0_bypass[0]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[1]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[2]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[3]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[4]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[5]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[6]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[7]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[8]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[9]  ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[10] ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[11] ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[12] ; traffic_io:peripherals|keys_rtl_0 ;
+; traffic_io:peripherals|keys_rtl_0_bypass[13] ; traffic_io:peripherals|keys_rtl_0 ;
++----------------------------------------------+-----------------------------------+
+
+
++-----------------------------------------------------------------------------------+
+; Registers Packed Into Inferred Megafunctions                                      ;
++--------------------------------------+-------------------------------------+------+
+; Register Name                        ; Megafunction                        ; Type ;
++--------------------------------------+-------------------------------------+------+
+; CPU_Part1:cpu|bram:memory|q_a[0..15] ; CPU_Part1:cpu|bram:memory|ram_rtl_0 ; RAM  ;
+; CPU_Part1:cpu|bram:memory|q_b[0..15] ; CPU_Part1:cpu|bram:memory|ram_rtl_0 ; RAM  ;
++--------------------------------------+-------------------------------------+------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                                                     ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------+
+; 24:1               ; 2 bits    ; 32 LEs        ; 4 LEs                ; 28 LEs                 ; Yes        ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|current_q8[14]                                          ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Selector2391                                            ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Selector2391                                            ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Selector2391                                            ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Selector1535                                            ;
+; 4:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Selector1535                                            ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux84                                                   ;
+; 4:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux84                                                   ;
+; 4:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Selector1535                                            ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux80                                                   ;
+; 32:1               ; 32 bits   ; 672 LEs       ; 512 LEs              ; 160 LEs                ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux79                                                   ;
+; 128:1              ; 4 bits    ; 340 LEs       ; 292 LEs              ; 48 LEs                 ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux33                                                   ;
+; 128:1              ; 4 bits    ; 340 LEs       ; 292 LEs              ; 48 LEs                 ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux42                                                   ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux28                                                   ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux38                                                   ;
+; 14:1               ; 4 bits    ; 36 LEs        ; 36 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux28                                                   ;
+; 14:1               ; 4 bits    ; 36 LEs        ; 36 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux38                                                   ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux37                                                   ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux46                                                   ;
+; 14:1               ; 2 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux38                                                   ;
+; 16:1               ; 4 bits    ; 40 LEs        ; 40 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux84                                                   ;
+; 16:1               ; 2 bits    ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux29                                                   ;
+; 55:1               ; 6 bits    ; 216 LEs       ; 216 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux29                                                   ;
+; 55:1               ; 6 bits    ; 216 LEs       ; 216 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux38                                                   ;
+; 218:1              ; 2 bits    ; 290 LEs       ; 266 LEs              ; 24 LEs                 ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux30                                                   ;
+; 218:1              ; 2 bits    ; 290 LEs       ; 266 LEs              ; 24 LEs                 ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux45                                                   ;
+; 3:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 3:1                ; 18 bits   ; 36 LEs        ; 36 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|always0                                                                ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux32                                                                  ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux32                                                                  ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux44                                                                  ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux44                                                                  ;
+; 4:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 4:1                ; 10 bits   ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_y                                                                 ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux32                                                                  ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 9:1                ; 2 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux44                                                                  ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 33:1               ; 20 bits   ; 440 LEs       ; 340 LEs              ; 100 LEs                ; No         ; |demo_VGA_CPU|vga_scene:scene|bus_x[9]                                                               ;
+; 16:1               ; 4 bits    ; 40 LEs        ; 40 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 16:1               ; 6 bits    ; 60 LEs        ; 60 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 16:1               ; 2 bits    ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux42                                                                  ;
+; 16:1               ; 4 bits    ; 40 LEs        ; 40 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 16:1               ; 6 bits    ; 60 LEs        ; 60 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 16:1               ; 2 bits    ; 20 LEs        ; 20 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|Mux54                                                                  ;
+; 47:1               ; 17 bits   ; 527 LEs       ; 527 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|back_x                                                                 ;
+; 3:1                ; 15 bits   ; 30 LEs        ; 0 LEs                ; 30 LEs                 ; Yes        ; |demo_VGA_CPU|CPU_Part1:cpu|ProgramCounter:program_counter|pc[13]                                    ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|age[4]                                                  ;
+; 4:1                ; 6 bits    ; 12 LEs        ; 12 LEs               ; 0 LEs                  ; Yes        ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|axis[1]                                                 ;
+; 4:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; Yes        ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|remaining[1]                                            ;
+; 16:1               ; 2 bits    ; 20 LEs        ; 6 LEs                ; 14 LEs                 ; Yes        ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|FlagRegister:flag_register|stored_flags[4] ;
+; 10:1               ; 3 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; Yes        ; |demo_VGA_CPU|CPU_Part1:cpu|CPUControl:control|state[2]                                              ;
+; 7:1                ; 4 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; Yes        ; |demo_VGA_CPU|CPU_Part1:cpu|io_read_latched[1]                                                       ;
+; 4:1                ; 12 bits   ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux0                                                    ;
+; 4:1                ; 9 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|ALU:alu_unit|ShiftLeft0                    ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|ALU:alu_unit|ShiftRight1                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 3:1                ; 12 bits   ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 4:1                ; 12 bits   ; 24 LEs        ; 24 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux87                                                   ;
+; 4:1                ; 72 bits   ; 144 LEs       ; 144 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 4:1                ; 32 bits   ; 64 LEs        ; 64 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux1                                                    ;
+; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux0                                                    ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|selected_rhs[7]                            ;
+; 16:1               ; 16 bits   ; 160 LEs       ; 160 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|RegisterFile:register_file|Mux0            ;
+; 16:1               ; 16 bits   ; 160 LEs       ; 160 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|RegisterFile:register_file|Mux25           ;
+; 17:1               ; 2 bits    ; 22 LEs        ; 14 LEs               ; 8 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|datapath_flag_write_enable[3]                                            ;
+; 64:1               ; 10 bits   ; 420 LEs       ; 320 LEs              ; 100 LEs                ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux19                                                   ;
+; 10:1               ; 12 bits   ; 72 LEs        ; 72 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux1                                                    ;
+; 10:1               ; 12 bits   ; 72 LEs        ; 72 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux1                                                    ;
+; 20:1               ; 4 bits    ; 52 LEs        ; 16 LEs               ; 36 LEs                 ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|selected_rhs[3]                            ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux0                                                    ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux0                                                    ;
+; 14:1               ; 2 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux17                                                   ;
+; 14:1               ; 2 bits    ; 18 LEs        ; 18 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux1                                                    ;
+; 16:1               ; 32 bits   ; 320 LEs       ; 320 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux1                                                    ;
+; 16:1               ; 16 bits   ; 160 LEs       ; 160 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux0                                                    ;
+; 22:1               ; 8 bits    ; 112 LEs       ; 112 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 23:1               ; 8 bits    ; 120 LEs       ; 120 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux87                                                   ;
+; 25:1               ; 2 bits    ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 26:1               ; 2 bits    ; 34 LEs        ; 34 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 26:1               ; 2 bits    ; 34 LEs        ; 32 LEs               ; 2 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux99                                                   ;
+; 27:1               ; 2 bits    ; 36 LEs        ; 36 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux87                                                   ;
+; 27:1               ; 2 bits    ; 36 LEs        ; 32 LEs               ; 4 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|write_back_data[9]                         ;
+; 29:1               ; 2 bits    ; 38 LEs        ; 32 LEs               ; 6 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|write_back_data[5]                         ;
+; 28:1               ; 2 bits    ; 36 LEs        ; 36 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|write_back_data[13]                        ;
+; 29:1               ; 2 bits    ; 38 LEs        ; 34 LEs               ; 4 LEs                  ; No         ; |demo_VGA_CPU|CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|write_back_data[1]                         ;
+; 47:1               ; 4 bits    ; 124 LEs       ; 124 LEs              ; 0 LEs                  ; No         ; |demo_VGA_CPU|sprite_smoother:smooth_sprites|Mux88                                                   ;
+; 5:1                ; 17 bits   ; 51 LEs        ; 0 LEs                ; 51 LEs                 ; Yes        ; |demo_VGA_CPU|PS2Keyboard:keyboard|PS2KeyDecoder:decoder|prefix_timeout[6]                           ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |demo_VGA_CPU|PS2Keyboard:keyboard|PS2KeyDecoder:decoder|pause_bytes_left[3]                         ;
+; 4:1                ; 17 bits   ; 34 LEs        ; 0 LEs                ; 34 LEs                 ; Yes        ; |demo_VGA_CPU|PS2Keyboard:keyboard|PS2Receiver:receiver|timeout_count[2]                             ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 8 LEs                ; 8 LEs                  ; Yes        ; |demo_VGA_CPU|PS2Keyboard:keyboard|PS2Receiver:receiver|bit_count[0]                                 ;
+; 3:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|always0                                                                ;
+; 3:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|always0                                                                ;
+; 4:1                ; 7 bits    ; 14 LEs        ; 14 LEs               ; 0 LEs                  ; No         ; |demo_VGA_CPU|vga_scene:scene|always0                                                                ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------+
+; Source assignments for traffic_io:peripherals|altsyncram:keys_rtl_0|altsyncram_fvj1:auto_generated ;
++---------------------------------+--------------------+------+--------------------------------------+
+; Assignment                      ; Value              ; From ; To                                   ;
++---------------------------------+--------------------+------+--------------------------------------+
+; OPTIMIZE_POWER_DURING_SYNTHESIS ; NORMAL_COMPILATION ; -    ; -                                    ;
++---------------------------------+--------------------+------+--------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------+
+; Source assignments for CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0|altsyncram_4e72:auto_generated ;
++---------------------------------+--------------------+------+----------------------------------------+
+; Assignment                      ; Value              ; From ; To                                     ;
++---------------------------------+--------------------+------+----------------------------------------+
+; OPTIMIZE_POWER_DURING_SYNTHESIS ; NORMAL_COMPILATION ; -    ; -                                      ;
++---------------------------------+--------------------+------+----------------------------------------+
+
+
++-------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: PS2Keyboard:keyboard ;
++----------------+--------+-----------------------------------------+
+; Parameter Name ; Value  ; Type                                    ;
++----------------+--------+-----------------------------------------+
+; TIMEOUT_CYCLES ; 100000 ; Signed Integer                          ;
++----------------+--------+-----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: PS2Keyboard:keyboard|PS2Receiver:receiver ;
++----------------+--------+--------------------------------------------------------------+
+; Parameter Name ; Value  ; Type                                                         ;
++----------------+--------+--------------------------------------------------------------+
+; TIMEOUT_CYCLES ; 100000 ; Signed Integer                                               ;
++----------------+--------+--------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: PS2Keyboard:keyboard|PS2KeyDecoder:decoder ;
++----------------+--------+---------------------------------------------------------------+
+; Parameter Name ; Value  ; Type                                                          ;
++----------------+--------+---------------------------------------------------------------+
+; TIMEOUT_CYCLES ; 100000 ; Signed Integer                                                ;
++----------------+--------+---------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: CPU_Part1:cpu ;
++----------------+----------------------+--------------------+
+; Parameter Name ; Value                ; Type               ;
++----------------+----------------------+--------------------+
+; INIT_FILE      ; firmware/traffic.hex ; String             ;
+; ADDRESS_WIDTH  ; 15                   ; Signed Integer     ;
++----------------+----------------------+--------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: CPU_Part1:cpu|ProgramCounter:program_counter ;
++----------------+-------+------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                             ;
++----------------+-------+------------------------------------------------------------------+
+; WIDTH          ; 15    ; Signed Integer                                                   ;
++----------------+-------+------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: CPU_Part1:cpu|bram:memory ;
++----------------+----------------------+--------------------------------+
+; Parameter Name ; Value                ; Type                           ;
++----------------+----------------------+--------------------------------+
+; DATA_WIDTH     ; 16                   ; Signed Integer                 ;
+; ADDR_WIDTH     ; 15                   ; Signed Integer                 ;
+; INIT_FILE      ; firmware/traffic.hex ; String                         ;
++----------------+----------------------+--------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|ALU:alu_unit ;
++----------------+-------+------------------------------------------------------------------------------+
+; Parameter Name ; Value ; Type                                                                         ;
++----------------+-------+------------------------------------------------------------------------------+
+; WIDTH          ; 16    ; Signed Integer                                                               ;
++----------------+-------+------------------------------------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-----------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: traffic_io:peripherals|altsyncram:keys_rtl_0 ;
++------------------------------------+----------------------+-----------------------------------+
+; Parameter Name                     ; Value                ; Type                              ;
++------------------------------------+----------------------+-----------------------------------+
+; BYTE_SIZE_BLOCK                    ; 8                    ; Untyped                           ;
+; AUTO_CARRY_CHAINS                  ; ON                   ; AUTO_CARRY                        ;
+; IGNORE_CARRY_BUFFERS               ; OFF                  ; IGNORE_CARRY                      ;
+; AUTO_CASCADE_CHAINS                ; ON                   ; AUTO_CASCADE                      ;
+; IGNORE_CASCADE_BUFFERS             ; OFF                  ; IGNORE_CASCADE                    ;
+; WIDTH_BYTEENA                      ; 1                    ; Untyped                           ;
+; OPERATION_MODE                     ; DUAL_PORT            ; Untyped                           ;
+; WIDTH_A                            ; 5                    ; Untyped                           ;
+; WIDTHAD_A                          ; 4                    ; Untyped                           ;
+; NUMWORDS_A                         ; 16                   ; Untyped                           ;
+; OUTDATA_REG_A                      ; UNREGISTERED         ; Untyped                           ;
+; ADDRESS_ACLR_A                     ; NONE                 ; Untyped                           ;
+; OUTDATA_ACLR_A                     ; NONE                 ; Untyped                           ;
+; WRCONTROL_ACLR_A                   ; NONE                 ; Untyped                           ;
+; INDATA_ACLR_A                      ; NONE                 ; Untyped                           ;
+; BYTEENA_ACLR_A                     ; NONE                 ; Untyped                           ;
+; WIDTH_B                            ; 5                    ; Untyped                           ;
+; WIDTHAD_B                          ; 4                    ; Untyped                           ;
+; NUMWORDS_B                         ; 16                   ; Untyped                           ;
+; INDATA_REG_B                       ; CLOCK1               ; Untyped                           ;
+; WRCONTROL_WRADDRESS_REG_B          ; CLOCK1               ; Untyped                           ;
+; RDCONTROL_REG_B                    ; CLOCK1               ; Untyped                           ;
+; ADDRESS_REG_B                      ; CLOCK0               ; Untyped                           ;
+; OUTDATA_REG_B                      ; UNREGISTERED         ; Untyped                           ;
+; BYTEENA_REG_B                      ; CLOCK1               ; Untyped                           ;
+; INDATA_ACLR_B                      ; NONE                 ; Untyped                           ;
+; WRCONTROL_ACLR_B                   ; NONE                 ; Untyped                           ;
+; ADDRESS_ACLR_B                     ; NONE                 ; Untyped                           ;
+; OUTDATA_ACLR_B                     ; NONE                 ; Untyped                           ;
+; RDCONTROL_ACLR_B                   ; NONE                 ; Untyped                           ;
+; BYTEENA_ACLR_B                     ; NONE                 ; Untyped                           ;
+; WIDTH_BYTEENA_A                    ; 1                    ; Untyped                           ;
+; WIDTH_BYTEENA_B                    ; 1                    ; Untyped                           ;
+; RAM_BLOCK_TYPE                     ; AUTO                 ; Untyped                           ;
+; BYTE_SIZE                          ; 8                    ; Untyped                           ;
+; READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE            ; Untyped                           ;
+; READ_DURING_WRITE_MODE_PORT_A      ; NEW_DATA_NO_NBE_READ ; Untyped                           ;
+; READ_DURING_WRITE_MODE_PORT_B      ; NEW_DATA_NO_NBE_READ ; Untyped                           ;
+; INIT_FILE                          ; UNUSED               ; Untyped                           ;
+; INIT_FILE_LAYOUT                   ; PORT_A               ; Untyped                           ;
+; MAXIMUM_DEPTH                      ; 0                    ; Untyped                           ;
+; CLOCK_ENABLE_INPUT_A               ; NORMAL               ; Untyped                           ;
+; CLOCK_ENABLE_INPUT_B               ; NORMAL               ; Untyped                           ;
+; CLOCK_ENABLE_OUTPUT_A              ; NORMAL               ; Untyped                           ;
+; CLOCK_ENABLE_OUTPUT_B              ; NORMAL               ; Untyped                           ;
+; CLOCK_ENABLE_CORE_A                ; USE_INPUT_CLKEN      ; Untyped                           ;
+; CLOCK_ENABLE_CORE_B                ; USE_INPUT_CLKEN      ; Untyped                           ;
+; ENABLE_ECC                         ; FALSE                ; Untyped                           ;
+; ECC_PIPELINE_STAGE_ENABLED         ; FALSE                ; Untyped                           ;
+; WIDTH_ECCSTATUS                    ; 3                    ; Untyped                           ;
+; DEVICE_FAMILY                      ; Cyclone V            ; Untyped                           ;
+; CBXI_PARAMETER                     ; altsyncram_fvj1      ; Untyped                           ;
++------------------------------------+----------------------+-----------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for Inferred Entity Instance: CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0                ;
++------------------------------------+----------------------------------------------------------+----------------+
+; Parameter Name                     ; Value                                                    ; Type           ;
++------------------------------------+----------------------------------------------------------+----------------+
+; BYTE_SIZE_BLOCK                    ; 8                                                        ; Untyped        ;
+; AUTO_CARRY_CHAINS                  ; ON                                                       ; AUTO_CARRY     ;
+; IGNORE_CARRY_BUFFERS               ; OFF                                                      ; IGNORE_CARRY   ;
+; AUTO_CASCADE_CHAINS                ; ON                                                       ; AUTO_CASCADE   ;
+; IGNORE_CASCADE_BUFFERS             ; OFF                                                      ; IGNORE_CASCADE ;
+; WIDTH_BYTEENA                      ; 1                                                        ; Untyped        ;
+; OPERATION_MODE                     ; BIDIR_DUAL_PORT                                          ; Untyped        ;
+; WIDTH_A                            ; 16                                                       ; Untyped        ;
+; WIDTHAD_A                          ; 15                                                       ; Untyped        ;
+; NUMWORDS_A                         ; 32768                                                    ; Untyped        ;
+; OUTDATA_REG_A                      ; UNREGISTERED                                             ; Untyped        ;
+; ADDRESS_ACLR_A                     ; NONE                                                     ; Untyped        ;
+; OUTDATA_ACLR_A                     ; NONE                                                     ; Untyped        ;
+; WRCONTROL_ACLR_A                   ; NONE                                                     ; Untyped        ;
+; INDATA_ACLR_A                      ; NONE                                                     ; Untyped        ;
+; BYTEENA_ACLR_A                     ; NONE                                                     ; Untyped        ;
+; WIDTH_B                            ; 16                                                       ; Untyped        ;
+; WIDTHAD_B                          ; 15                                                       ; Untyped        ;
+; NUMWORDS_B                         ; 32768                                                    ; Untyped        ;
+; INDATA_REG_B                       ; CLOCK0                                                   ; Untyped        ;
+; WRCONTROL_WRADDRESS_REG_B          ; CLOCK0                                                   ; Untyped        ;
+; RDCONTROL_REG_B                    ; CLOCK1                                                   ; Untyped        ;
+; ADDRESS_REG_B                      ; CLOCK0                                                   ; Untyped        ;
+; OUTDATA_REG_B                      ; UNREGISTERED                                             ; Untyped        ;
+; BYTEENA_REG_B                      ; CLOCK1                                                   ; Untyped        ;
+; INDATA_ACLR_B                      ; NONE                                                     ; Untyped        ;
+; WRCONTROL_ACLR_B                   ; NONE                                                     ; Untyped        ;
+; ADDRESS_ACLR_B                     ; NONE                                                     ; Untyped        ;
+; OUTDATA_ACLR_B                     ; NONE                                                     ; Untyped        ;
+; RDCONTROL_ACLR_B                   ; NONE                                                     ; Untyped        ;
+; BYTEENA_ACLR_B                     ; NONE                                                     ; Untyped        ;
+; WIDTH_BYTEENA_A                    ; 1                                                        ; Untyped        ;
+; WIDTH_BYTEENA_B                    ; 1                                                        ; Untyped        ;
+; RAM_BLOCK_TYPE                     ; AUTO                                                     ; Untyped        ;
+; BYTE_SIZE                          ; 8                                                        ; Untyped        ;
+; READ_DURING_WRITE_MODE_MIXED_PORTS ; OLD_DATA                                                 ; Untyped        ;
+; READ_DURING_WRITE_MODE_PORT_A      ; NEW_DATA_NO_NBE_READ                                     ; Untyped        ;
+; READ_DURING_WRITE_MODE_PORT_B      ; NEW_DATA_NO_NBE_READ                                     ; Untyped        ;
+; INIT_FILE                          ; db/TrafficFlow_ConvoyPriority.ram0_bram_cbd1105c.hdl.mif ; Untyped        ;
+; INIT_FILE_LAYOUT                   ; PORT_A                                                   ; Untyped        ;
+; MAXIMUM_DEPTH                      ; 0                                                        ; Untyped        ;
+; CLOCK_ENABLE_INPUT_A               ; NORMAL                                                   ; Untyped        ;
+; CLOCK_ENABLE_INPUT_B               ; NORMAL                                                   ; Untyped        ;
+; CLOCK_ENABLE_OUTPUT_A              ; NORMAL                                                   ; Untyped        ;
+; CLOCK_ENABLE_OUTPUT_B              ; NORMAL                                                   ; Untyped        ;
+; CLOCK_ENABLE_CORE_A                ; USE_INPUT_CLKEN                                          ; Untyped        ;
+; CLOCK_ENABLE_CORE_B                ; USE_INPUT_CLKEN                                          ; Untyped        ;
+; ENABLE_ECC                         ; FALSE                                                    ; Untyped        ;
+; ECC_PIPELINE_STAGE_ENABLED         ; FALSE                                                    ; Untyped        ;
+; WIDTH_ECCSTATUS                    ; 3                                                        ; Untyped        ;
+; DEVICE_FAMILY                      ; Cyclone V                                                ; Untyped        ;
+; CBXI_PARAMETER                     ; altsyncram_4e72                                          ; Untyped        ;
++------------------------------------+----------------------------------------------------------+----------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------------------------------------+
+; altsyncram Parameter Settings by Entity Instance                                           ;
++-------------------------------------------+------------------------------------------------+
+; Name                                      ; Value                                          ;
++-------------------------------------------+------------------------------------------------+
+; Number of entity instances                ; 2                                              ;
+; Entity Instance                           ; traffic_io:peripherals|altsyncram:keys_rtl_0   ;
+;     -- OPERATION_MODE                     ; DUAL_PORT                                      ;
+;     -- WIDTH_A                            ; 5                                              ;
+;     -- NUMWORDS_A                         ; 16                                             ;
+;     -- OUTDATA_REG_A                      ; UNREGISTERED                                   ;
+;     -- WIDTH_B                            ; 5                                              ;
+;     -- NUMWORDS_B                         ; 16                                             ;
+;     -- ADDRESS_REG_B                      ; CLOCK0                                         ;
+;     -- OUTDATA_REG_B                      ; UNREGISTERED                                   ;
+;     -- RAM_BLOCK_TYPE                     ; AUTO                                           ;
+;     -- READ_DURING_WRITE_MODE_MIXED_PORTS ; DONT_CARE                                      ;
+; Entity Instance                           ; CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0 ;
+;     -- OPERATION_MODE                     ; BIDIR_DUAL_PORT                                ;
+;     -- WIDTH_A                            ; 16                                             ;
+;     -- NUMWORDS_A                         ; 32768                                          ;
+;     -- OUTDATA_REG_A                      ; UNREGISTERED                                   ;
+;     -- WIDTH_B                            ; 16                                             ;
+;     -- NUMWORDS_B                         ; 32768                                          ;
+;     -- ADDRESS_REG_B                      ; CLOCK0                                         ;
+;     -- OUTDATA_REG_B                      ; UNREGISTERED                                   ;
+;     -- RAM_BLOCK_TYPE                     ; AUTO                                           ;
+;     -- READ_DURING_WRITE_MODE_MIXED_PORTS ; OLD_DATA                                       ;
++-------------------------------------------+------------------------------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "traffic_io:peripherals"                                                                                ;
++-------------------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port                    ; Type   ; Severity ; Details                                                                             ;
++-------------------------+--------+----------+-------------------------------------------------------------------------------------+
+; display_state[244..230] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[223..216] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[204..168] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[164..128] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[124..112] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[95..88]   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[47..42]   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[39..34]   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[23..18]   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[15..10]   ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[7..2]     ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; display_state[27]       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; frame_id                ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-------------------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "CPU_Part1:cpu|ALU_RegFile_Datapath:datapath"                                                   ;
++-----------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port            ; Type   ; Severity ; Details                                                                             ;
++-----------------+--------+----------+-------------------------------------------------------------------------------------+
+; read_enable_a   ; Input  ; Info     ; Stuck at VCC                                                                        ;
+; read_enable_b   ; Input  ; Info     ; Stuck at VCC                                                                        ;
+; selected_rhs    ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; alu_flags       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; write_back_data ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-----------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "CPU_Part1:cpu|CPUControl:control"                                                                        ;
++---------------------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port                      ; Type   ; Severity ; Details                                                                             ;
++---------------------------+--------+----------+-------------------------------------------------------------------------------------+
+; instruction_memory_enable ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++---------------------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-------------------------------------------------------+
+; Port Connectivity Checks: "CPU_Part1:cpu|bram:memory" ;
++--------+-------+----------+---------------------------+
+; Port   ; Type  ; Severity ; Details                   ;
++--------+-------+----------+---------------------------+
+; data_a ; Input ; Info     ; Stuck at GND              ;
+; we_a   ; Input ; Info     ; Stuck at GND              ;
++--------+-------+----------+---------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "CPU_Part1:cpu"                                                                                          ;
++--------------------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port                     ; Type   ; Severity ; Details                                                                             ;
++--------------------------+--------+----------+-------------------------------------------------------------------------------------+
+; debug_register_select[3] ; Input  ; Info     ; Stuck at GND                                                                        ;
+; debug_register_value     ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; pc                       ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; instruction              ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; state                    ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; read_data_a              ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; read_data_b              ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; alu_result               ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; stored_flags             ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++--------------------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "PS2Keyboard:keyboard"                                                                     ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; Port       ; Type   ; Severity ; Details                                                                             ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+; scan_code  ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; scan_valid ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++------------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------+
+; Post-Synthesis Netlist Statistics for Top Partition ;
++-----------------------+-----------------------------+
+; Type                  ; Count                       ;
++-----------------------+-----------------------------+
+; arriav_ff             ; 5466                        ;
+;     CLR               ; 1599                        ;
+;     CLR SCLR          ; 41                          ;
+;     ENA               ; 5                           ;
+;     ENA CLR           ; 3495                        ;
+;     ENA CLR SCLR      ; 297                         ;
+;     ENA CLR SLD       ; 15                          ;
+;     plain             ; 14                          ;
+; arriav_lcell_comb     ; 30608                       ;
+;     arith             ; 4206                        ;
+;         0 data inputs ; 301                         ;
+;         1 data inputs ; 2533                        ;
+;         2 data inputs ; 711                         ;
+;         3 data inputs ; 89                          ;
+;         4 data inputs ; 249                         ;
+;         5 data inputs ; 323                         ;
+;     extend            ; 1711                        ;
+;         7 data inputs ; 1711                        ;
+;     normal            ; 24547                       ;
+;         0 data inputs ; 1                           ;
+;         1 data inputs ; 402                         ;
+;         2 data inputs ; 1129                        ;
+;         3 data inputs ; 2697                        ;
+;         4 data inputs ; 3831                        ;
+;         5 data inputs ; 5378                        ;
+;         6 data inputs ; 11109                       ;
+;     shared            ; 144                         ;
+;         0 data inputs ; 3                           ;
+;         1 data inputs ; 11                          ;
+;         2 data inputs ; 114                         ;
+;         3 data inputs ; 10                          ;
+;         4 data inputs ; 6                           ;
+; arriav_mac            ; 3                           ;
+; boundary_port         ; 46                          ;
+; stratixv_ram_block    ; 69                          ;
+;                       ;                             ;
+; Max LUT depth         ; 114.90                      ;
+; Average LUT depth     ; 37.50                       ;
++-----------------------+-----------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:05:16     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+    Info: Processing started: Tue Nov 24 18:03:21 2026
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off TrafficFlow_ConvoyPriority -c TrafficFlow_ConvoyPriority
+Info (20032): Parallel compilation is enabled and will use up to 4 processors
+Info (12021): Found 1 design units, including 1 entities, in source file demo_vga_cpu.v
+    Info (12023): Found entity 1: demo_VGA_CPU File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file vga_scene.v
+    Info (12023): Found entity 1: vga_scene File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 4
+Info (12021): Found 1 design units, including 1 entities, in source file vga_timing.v
+    Info (12023): Found entity 1: vga_timing File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_timing.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file sprite_smoother.v
+    Info (12023): Found entity 1: sprite_smoother File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/sprite_smoother.v Line: 4
+Info (12021): Found 1 design units, including 1 entities, in source file ps2keyboard.v
+    Info (12023): Found entity 1: PS2Keyboard File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2Keyboard.v Line: 4
+Info (12021): Found 1 design units, including 1 entities, in source file ps2receiver.v
+    Info (12023): Found entity 1: PS2Receiver File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2Receiver.v Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file ps2keydecoder.v
+    Info (12023): Found entity 1: PS2KeyDecoder File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2KeyDecoder.v Line: 5
+Info (12021): Found 1 design units, including 1 entities, in source file keyboardcommands.v
+    Info (12023): Found entity 1: KeyboardCommands File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/KeyboardCommands.v Line: 2
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/programcounter.v
+    Info (12023): Found entity 1: ProgramCounter File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ProgramCounter.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/instructiondecoder.v
+    Info (12023): Found entity 1: InstructionDecoder File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/InstructionDecoder.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/cpu_part1.v
+    Info (12023): Found entity 1: CPU_Part1 File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/registerfile.v
+    Info (12023): Found entity 1: RegisterFile File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/RegisterFile.v Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/cpucontrol.v
+    Info (12023): Found entity 1: CPUControl File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPUControl.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/alu.v
+    Info (12023): Found entity 1: ALU File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU.v Line: 15
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/bram.v
+    Info (12023): Found entity 1: bram File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/bram.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/instructionregister.v
+    Info (12023): Found entity 1: InstructionRegister File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/InstructionRegister.v Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/traffic_io.v
+    Info (12023): Found entity 1: traffic_io File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/traffic_io.v Line: 4
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/alu_regfile_datapath.v
+    Info (12023): Found entity 1: ALU_RegFile_Datapath File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU_RegFile_Datapath.v Line: 3
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/flagregister.v
+    Info (12023): Found entity 1: FlagRegister File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/FlagRegister.v Line: 15
+Info (12021): Found 1 design units, including 1 entities, in source file cpu/branchcondition.v
+    Info (12023): Found entity 1: BranchCondition File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/BranchCondition.v Line: 1
+Info (12127): Elaborating entity "demo_VGA_CPU" for the top level hierarchy
+Info (12128): Elaborating entity "vga_timing" for hierarchy "vga_timing:timing" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 44
+Info (12128): Elaborating entity "PS2Keyboard" for hierarchy "PS2Keyboard:keyboard" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 45
+Info (12128): Elaborating entity "PS2Receiver" for hierarchy "PS2Keyboard:keyboard|PS2Receiver:receiver" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2Keyboard.v Line: 26
+Info (12128): Elaborating entity "PS2KeyDecoder" for hierarchy "PS2Keyboard:keyboard|PS2KeyDecoder:decoder" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/PS2Keyboard.v Line: 36
+Info (12128): Elaborating entity "KeyboardCommands" for hierarchy "KeyboardCommands:keys" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 46
+Info (12128): Elaborating entity "CPU_Part1" for hierarchy "CPU_Part1:cpu" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 53
+Info (12128): Elaborating entity "ProgramCounter" for hierarchy "CPU_Part1:cpu|ProgramCounter:program_counter" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 114
+Info (12128): Elaborating entity "bram" for hierarchy "CPU_Part1:cpu|bram:memory" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 144
+Info (12128): Elaborating entity "InstructionRegister" for hierarchy "CPU_Part1:cpu|InstructionRegister:instruction_register" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 153
+Info (12128): Elaborating entity "InstructionDecoder" for hierarchy "CPU_Part1:cpu|InstructionDecoder:instruction_decoder" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 175
+Info (12128): Elaborating entity "BranchCondition" for hierarchy "CPU_Part1:cpu|BranchCondition:branch_condition_checker" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 182
+Info (12128): Elaborating entity "CPUControl" for hierarchy "CPU_Part1:cpu|CPUControl:control" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 206
+Info (12128): Elaborating entity "ALU_RegFile_Datapath" for hierarchy "CPU_Part1:cpu|ALU_RegFile_Datapath:datapath" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/CPU_Part1.v Line: 246
+Info (12128): Elaborating entity "RegisterFile" for hierarchy "CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|RegisterFile:register_file" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU_RegFile_Datapath.v Line: 78
+Info (12128): Elaborating entity "ALU" for hierarchy "CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|ALU:alu_unit" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU_RegFile_Datapath.v Line: 89
+Info (12128): Elaborating entity "FlagRegister" for hierarchy "CPU_Part1:cpu|ALU_RegFile_Datapath:datapath|FlagRegister:flag_register" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/CPU/ALU_RegFile_Datapath.v Line: 97
+Info (12128): Elaborating entity "traffic_io" for hierarchy "traffic_io:peripherals" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 56
+Info (12128): Elaborating entity "sprite_smoother" for hierarchy "sprite_smoother:smooth_sprites" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 58
+Warning (10230): Verilog HDL assignment warning at sprite_smoother.v(102): truncated value with size 33 to match size of target (19) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/sprite_smoother.v Line: 102
+Warning (10230): Verilog HDL assignment warning at sprite_smoother.v(107): truncated value with size 19 to match size of target (18) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/sprite_smoother.v Line: 107
+Warning (10230): Verilog HDL assignment warning at sprite_smoother.v(114): truncated value with size 19 to match size of target (18) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/sprite_smoother.v Line: 114
+Info (12128): Elaborating entity "vga_scene" for hierarchy "vga_scene:scene" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 73
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(550): truncated value with size 32 to match size of target (12) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 550
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(551): truncated value with size 32 to match size of target (12) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 551
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(386): truncated value with size 32 to match size of target (12) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 386
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(320): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 320
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(321): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 321
+Info (10264): Verilog HDL Case Statement information at vga_scene.v(325): all case item expressions in this case statement are onehot File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 325
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(332): truncated value with size 32 to match size of target (7) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 332
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(420): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 420
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(421): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 421
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(356): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 356
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(357): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 357
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(442): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 442
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(443): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 443
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(147): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 147
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(148): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 148
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(157): truncated value with size 32 to match size of target (6) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 157
+Warning (10776): Verilog HDL warning at vga_scene.v(142): variable i in static task or function text_pixel may have unintended latch behavior File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 142
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(198): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 198
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(199): truncated value with size 32 to match size of target (11) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 199
+Warning (10230): Verilog HDL assignment warning at vga_scene.v(206): truncated value with size 32 to match size of target (4) File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 206
+Warning (10776): Verilog HDL warning at vga_scene.v(193): variable i in static task or function compact_text_pixel may have unintended latch behavior File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 193
+Warning (10240): Verilog HDL Always Construct warning at vga_scene.v(550): inferring latch(es) for variable "car_slot", which holds its previous value in one or more paths through the always construct File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/vga_scene.v Line: 550
+Warning (276020): Inferred RAM node "traffic_io:peripherals|keys_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
+Info (276014): Found 1 instances of uninferred RAM logic
+    Info (276004): RAM logic "sprite_smoother:smooth_sprites|Ram0" is uninferred due to inappropriate RAM size File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/sprite_smoother.v Line: 35
+Info (19000): Inferred 2 megafunctions from design logic
+    Info (276029): Inferred altsyncram megafunction from the following design logic: "traffic_io:peripherals|keys_rtl_0" 
+        Info (286033): Parameter OPERATION_MODE set to DUAL_PORT
+        Info (286033): Parameter WIDTH_A set to 5
+        Info (286033): Parameter WIDTHAD_A set to 4
+        Info (286033): Parameter NUMWORDS_A set to 16
+        Info (286033): Parameter WIDTH_B set to 5
+        Info (286033): Parameter WIDTHAD_B set to 4
+        Info (286033): Parameter NUMWORDS_B set to 16
+        Info (286033): Parameter ADDRESS_ACLR_A set to NONE
+        Info (286033): Parameter OUTDATA_REG_B set to UNREGISTERED
+        Info (286033): Parameter ADDRESS_ACLR_B set to NONE
+        Info (286033): Parameter OUTDATA_ACLR_B set to NONE
+        Info (286033): Parameter ADDRESS_REG_B set to CLOCK0
+        Info (286033): Parameter INDATA_ACLR_A set to NONE
+        Info (286033): Parameter WRCONTROL_ACLR_A set to NONE
+    Info (276029): Inferred altsyncram megafunction from the following design logic: "CPU_Part1:cpu|bram:memory|ram_rtl_0" 
+        Info (286033): Parameter OPERATION_MODE set to BIDIR_DUAL_PORT
+        Info (286033): Parameter WIDTH_A set to 16
+        Info (286033): Parameter WIDTH_B set to 16
+        Info (286033): Parameter WIDTHAD_A set to 15
+        Info (286033): Parameter WIDTHAD_B set to 15
+        Info (286033): Parameter NUMWORDS_A set to 32768
+        Info (286033): Parameter NUMWORDS_B set to 32768
+        Info (286033): Parameter OUTDATA_REG_A set to UNREGISTERED
+        Info (286033): Parameter OUTDATA_REG_B set to UNREGISTERED
+        Info (286033): Parameter ADDRESS_REG_B set to CLOCK0
+        Info (286033): Parameter INDATA_REG_B set to CLOCK0
+        Info (286033): Parameter WRCONTROL_WRADDRESS_REG_B set to CLOCK0
+        Info (286033): Parameter INDATA_ACLR_A set to NONE
+        Info (286033): Parameter WRCONTROL_ACLR_A set to NONE
+        Info (286033): Parameter ADDRESS_ACLR_A set to NONE
+        Info (286033): Parameter ADDRESS_ACLR_B set to NONE
+        Info (286033): Parameter OUTDATA_ACLR_B set to NONE
+        Info (286033): Parameter INIT_FILE set to db/TrafficFlow_ConvoyPriority.ram0_bram_cbd1105c.hdl.mif
+        Info (286033): Parameter READ_DURING_WRITE_MODE_MIXED_PORTS set to OLD_DATA
+Info (12130): Elaborated megafunction instantiation "traffic_io:peripherals|altsyncram:keys_rtl_0"
+Info (12133): Instantiated megafunction "traffic_io:peripherals|altsyncram:keys_rtl_0" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "DUAL_PORT"
+    Info (12134): Parameter "WIDTH_A" = "5"
+    Info (12134): Parameter "WIDTHAD_A" = "4"
+    Info (12134): Parameter "NUMWORDS_A" = "16"
+    Info (12134): Parameter "WIDTH_B" = "5"
+    Info (12134): Parameter "WIDTHAD_B" = "4"
+    Info (12134): Parameter "NUMWORDS_B" = "16"
+    Info (12134): Parameter "ADDRESS_ACLR_A" = "NONE"
+    Info (12134): Parameter "OUTDATA_REG_B" = "UNREGISTERED"
+    Info (12134): Parameter "ADDRESS_ACLR_B" = "NONE"
+    Info (12134): Parameter "OUTDATA_ACLR_B" = "NONE"
+    Info (12134): Parameter "ADDRESS_REG_B" = "CLOCK0"
+    Info (12134): Parameter "INDATA_ACLR_A" = "NONE"
+    Info (12134): Parameter "WRCONTROL_ACLR_A" = "NONE"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_fvj1.tdf
+    Info (12023): Found entity 1: altsyncram_fvj1 File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/altsyncram_fvj1.tdf Line: 28
+Info (12130): Elaborated megafunction instantiation "CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0"
+Info (12133): Instantiated megafunction "CPU_Part1:cpu|bram:memory|altsyncram:ram_rtl_0" with the following parameter:
+    Info (12134): Parameter "OPERATION_MODE" = "BIDIR_DUAL_PORT"
+    Info (12134): Parameter "WIDTH_A" = "16"
+    Info (12134): Parameter "WIDTH_B" = "16"
+    Info (12134): Parameter "WIDTHAD_A" = "15"
+    Info (12134): Parameter "WIDTHAD_B" = "15"
+    Info (12134): Parameter "NUMWORDS_A" = "32768"
+    Info (12134): Parameter "NUMWORDS_B" = "32768"
+    Info (12134): Parameter "OUTDATA_REG_A" = "UNREGISTERED"
+    Info (12134): Parameter "OUTDATA_REG_B" = "UNREGISTERED"
+    Info (12134): Parameter "ADDRESS_REG_B" = "CLOCK0"
+    Info (12134): Parameter "INDATA_REG_B" = "CLOCK0"
+    Info (12134): Parameter "WRCONTROL_WRADDRESS_REG_B" = "CLOCK0"
+    Info (12134): Parameter "INDATA_ACLR_A" = "NONE"
+    Info (12134): Parameter "WRCONTROL_ACLR_A" = "NONE"
+    Info (12134): Parameter "ADDRESS_ACLR_A" = "NONE"
+    Info (12134): Parameter "ADDRESS_ACLR_B" = "NONE"
+    Info (12134): Parameter "OUTDATA_ACLR_B" = "NONE"
+    Info (12134): Parameter "INIT_FILE" = "db/TrafficFlow_ConvoyPriority.ram0_bram_cbd1105c.hdl.mif"
+    Info (12134): Parameter "READ_DURING_WRITE_MODE_MIXED_PORTS" = "OLD_DATA"
+Info (12021): Found 1 design units, including 1 entities, in source file db/altsyncram_4e72.tdf
+    Info (12023): Found entity 1: altsyncram_4e72 File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/altsyncram_4e72.tdf Line: 32
+Info (12021): Found 1 design units, including 1 entities, in source file db/decode_8la.tdf
+    Info (12023): Found entity 1: decode_8la File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/decode_8la.tdf Line: 23
+Info (12021): Found 1 design units, including 1 entities, in source file db/mux_7hb.tdf
+    Info (12023): Found entity 1: mux_7hb File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/db/mux_7hb.tdf Line: 23
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "VGA_B[0]" is stuck at GND File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 6
+    Warning (13410): Pin "VGA_B[1]" is stuck at GND File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 6
+    Warning (13410): Pin "VGA_SYNC_N" is stuck at GND File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 8
+Info (286030): Timing-Driven Synthesis is running
+Info (17049): 1 registers lost all their fanouts during netlist optimizations.
+Info (144001): Generated suppressed messages file C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/output_files/TrafficFlow_ConvoyPriority.map.smsg
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Warning (21074): Design contains 2 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "SW[1]" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 4
+    Warning (15610): No output dependent on input pin "SW[2]" File: C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/demo_VGA_CPU.v Line: 4
+Info (21057): Implemented 33700 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 7 input pins
+    Info (21059): Implemented 39 output pins
+    Info (21061): Implemented 33582 logic cells
+    Info (21064): Implemented 69 RAM segments
+    Info (21062): Implemented 3 DSP elements
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 32 warnings
+    Info: Peak virtual memory: 5810 megabytes
+    Info: Processing ended: Tue Nov 24 18:09:10 2026
+    Info: Elapsed time: 00:05:49
+    Info: Total CPU time (on all processors): 00:07:19
+
+
++------------------------------------------+
+; Analysis & Synthesis Suppressed Messages ;
++------------------------------------------+
+The suppressed messages can be found in C:/altera_lite/quartusprojects/finalproject/TrafficFlow_ConvoyPriority/output_files/TrafficFlow_ConvoyPriority.map.smsg.
+
+

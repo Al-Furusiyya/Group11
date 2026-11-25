@@ -1,0 +1,20 @@
+Fitter Status : Successful - Tue Nov 24 18:19:41 2026
+Quartus Prime Version : 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
+Revision Name : TrafficFlow_ConvoyPriority
+Top-level Entity Name : demo_VGA_CPU
+Family : Cyclone V
+Device : 5CSEMA5F31C6
+Timing Models : Final
+Logic utilization (in ALMs) : 20,519 / 32,070 ( 64 % )
+Total registers : 6072
+Total pins : 46 / 457 ( 10 % )
+Total virtual pins : 0
+Total block memory bits : 524,368 / 4,065,280 ( 13 % )
+Total RAM Blocks : 65 / 397 ( 16 % )
+Total DSP Blocks : 3 / 87 ( 3 % )
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 0 / 6 ( 0 % )
+Total DLLs : 0 / 4 ( 0 % )
