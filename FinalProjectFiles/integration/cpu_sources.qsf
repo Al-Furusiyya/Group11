@@ -1,0 +1,9 @@
+set traffic_root [file normalize [file join [file dirname [info script]] ..]]
+foreach file_name {demo_VGA_CPU.v vga_scene.v vga_timing.v sprite_smoother.v PS2Keyboard.v PS2Receiver.v PS2KeyDecoder.v KeyboardCommands.v CPU/ProgramCounter.v CPU/InstructionDecoder.v CPU/CPU_Part1.v CPU/RegisterFile.v CPU/CPUControl.v CPU/ALU.v CPU/bram.v CPU/InstructionRegister.v CPU/traffic_io.v CPU/ALU_RegFile_Datapath.v CPU/FlagRegister.v CPU/BranchCondition.v} {
+ set_global_assignment -name VERILOG_FILE [file join $traffic_root $file_name]
+}
+set_global_assignment -name MISC_FILE [file join $traffic_root firmware/traffic.hex]
+set_global_assignment -name MISC_FILE [file join $traffic_root art/service_art.vh]
+set_global_assignment -name SEARCH_PATH $traffic_root
+set_global_assignment -name SDC_FILE [file join $traffic_root integration/cpu.sdc]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to {*}
